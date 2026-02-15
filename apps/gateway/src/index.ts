@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
+import { streamText } from "hono/streaming";
 import OpenAI from "openai";
 import { scanAndRedact, type AuditLog } from "@shadow/core";
 
@@ -12,6 +13,7 @@ app.use("*", cors());
 
 // Initialize OpenAI Client (Server-side only)
 const openai = new OpenAI({
+  baseURL: process.env.OPENAI_BASE_URL,
   apiKey: process.env.OPENAI_API_KEY,
 });
 
@@ -54,15 +56,18 @@ app.post("/v1/chat/completions", async (c) => {
 
     // 4. FORWARD TO OPENAI
     // We use the modified 'messages' array
+    const model = body.model || "gemini-1.5-flash";
+    console.log(`Forwarding request to provider with model: ${model}`);
+    
     const completion = await openai.chat.completions.create({
-      model: body.model || "gpt-3.5-turbo",
+      model: model,
       messages: messages,
       stream: true, // Important for chat UX!
     });
 
     // 5. STREAM RESPONSE BACK TO CLIENT
     // Hono helper to stream SSE (Server-Sent Events)
-    return c.streamText(async (stream) => {
+    return streamText(c, async (stream) => {
       for await (const chunk of completion) {
         const content = chunk.choices[0]?.delta?.content || "";
         if (content) {
