@@ -18,6 +18,7 @@
     "@shadow/core": "workspace:*",
     "@shadow/db": "workspace:*",
     "ai": "^6.0.116",
-    "hono": "^4.11.9"
+    "drizzle-orm": "^0.45.1",
+    "hono": "4.11.9"
   }
 }

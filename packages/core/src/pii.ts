@@ -55,7 +55,6 @@ const PATTERNS: Record<PiiType, RegExp> = {
 // ------------------------------------------------------------------
 export function scanAndRedact(
   text: string,
-  strictMode = false,
 ): RedactionResult {
   let redactedText = text;
   const matches: PiiMatch[] = [];

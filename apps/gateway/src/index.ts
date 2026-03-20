@@ -3,8 +3,9 @@ import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { streamText } from "ai";
 import { google } from "@ai-sdk/google";
+import { desc } from "drizzle-orm";
 
-import { scanAndRedact, type AuditLog } from "@shadow/core";
+import { scanAndRedact } from "@shadow/core";
 import { db, auditLogs } from "@shadow/db";
 import { auth, type AuthUser, type AuthSession } from "@shadow/auth";
 
@@ -17,7 +18,10 @@ const app = new Hono<{ Variables: Variables }>();
 
 // Middleware
 app.use("*", logger());
-app.use("*", cors({ origin: "http://localhost:3001", credentials: true }));
+app.use("*", cors({ 
+  origin: ["http://localhost:3001", "http://127.0.0.1:3001"], 
+  credentials: true 
+}));
 
 // 1. Mount Better Auth Handler
 app.on(["GET", "POST"], "/api/auth/**", (c) => auth.handler(c.req.raw));
@@ -35,6 +39,30 @@ app.use("/v1/*", async (c, next) => {
   await next();
 });
 
+app.use("/api/logs", async (c, next) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+
+  if (!session) {
+    console.warn("[AUTH] Unauthorized attempt to access /api/logs");
+    return c.json({ error: "Unauthorized. Please sign in." }, 401);
+  }
+
+  c.set("user", session.user);
+  c.set("session", session.session);
+  await next();
+});
+
+// 3. GET Logs Route (Protected)
+const logsRoute = app.get("/api/logs", async (c) => {
+  const logs = await db
+    .select()
+    .from(auditLogs)
+    .orderBy(desc(auditLogs.timestamp))
+    .limit(50);
+  return c.json(logs);
+});
+
+// 4. Chat Completions Route (Protected)
 app.post("/v1/chat/completions", async (c) => {
   try {
     const user = c.get("user");
@@ -92,4 +120,6 @@ app.post("/v1/chat/completions", async (c) => {
   }
 });
 
+export type AppType = typeof logsRoute;
 export default app;
+
