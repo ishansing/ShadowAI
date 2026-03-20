@@ -3,7 +3,9 @@ import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { streamText } from "ai";
 import { google } from "@ai-sdk/google";
+
 import { scanAndRedact, type AuditLog } from "@shadow/core";
+import { db, auditLogs } from "@shadow/db";
 
 const app = new Hono();
 
@@ -34,19 +36,21 @@ app.post("/v1/chat/completions", async (c) => {
       messages[messages.length - 1].content = scanResult.redacted;
     }
 
-    // 3. LOGGING (Async - Fire and Forget)
-    // In a real app, push to Queue/DB here.
-    const auditLog: AuditLog = {
-      id: crypto.randomUUID(),
-      userId: "user_demo", // We'll add Auth later
-      userEmail: "demo@company.com",
-      prompt: scanResult.original, // Save original for compliance audit? (Dangerous but often required)
-      wasRedacted: wasRedacted,
-      redactedFields: scanResult.matches.map((m) => m.type),
-      provider: "gemini",
-      timestamp: new Date(),
-    };
-    console.log("Saving Audit Log:", JSON.stringify(auditLog, null, 2));
+    // 3. LOGGING (Async Fire-and-Forget)
+    // We do NOT use 'await' here. We let the promise resolve in the background.
+    db.insert(auditLogs)
+      .values({
+        userId: "user_demo_123", // Hardcoded for now until Phase 5
+        userEmail: "demo@company.com",
+        prompt: scanResult.original,
+        wasRedacted: wasRedacted,
+        redactedFields: scanResult.matches.map((m) => m.type),
+        provider: "gemini",
+      })
+      .execute()
+      .catch((err) => {
+        console.error("[DB ERROR] Failed to save audit log:", err);
+      });
 
     // 4. FORWARD TO GEMINI
     // We use the modified 'messages' array

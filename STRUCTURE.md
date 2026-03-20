@@ -26,9 +26,11 @@ We will use a **Turborepo** (or Bun Workspaces) structure. This is the industry 
 │   │   ├── /guard            # The "Pipeline" engine
 │   │   └── /types            # Zod schemas & TypeScript interfaces
 │   │
-│   ├── /db                   # Database Layer
-│   │   ├── /schema           # Drizzle ORM definitions
-│   │   └── client.ts         # Connection pooling
+│   ├── /db                   # Database Layer (@shadow/db)
+│   │   ├── /src
+│   │   │   ├── schema.ts     # Drizzle ORM definitions
+│   │   │   └── index.ts      # Client & Connection pooling
+│   │   └── drizzle.config.ts # Drizzle Kit configuration
 │   │
 │   └── /logger               # Async Logging Service
 │       └── index.ts          # Pushes logs to ClickHouse/Postgres
@@ -110,7 +112,7 @@ app.post("/v1/chat/completions", async (c) => {
 });
 ```
 
-#### 4. Unified Types (`@repo/db`)
+#### 4. Unified Types (`@shadow/db`)
 
 You define your database schema **once** using **Drizzle ORM** in `packages/db`.
 

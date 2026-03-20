@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: shadow_postgres
+    environment:
+      POSTGRES_USER: shadow_admin
+      POSTGRES_PASSWORD: shadow_password
+      POSTGRES_DB: shadow_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - shadow_pg_data:/var/lib/postgresql/data
+
+volumes:
+  shadow_pg_data:
