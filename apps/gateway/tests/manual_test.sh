@@ -31,19 +31,19 @@ curl -X POST "$URL" \
   -N \
   -d '{
     "messages": [
-      { "role": "user", "content": "My email is test@example.com and my secret key is sk-1234567890abcdef1234567890abcdef" }
+      { "role": "user", "content": "Repeat exactly what i say : My email is test@example.com and my secret key is sk-1234567890abcdef1234567890abcdef" }
     ]
   }'
 
 echo -e "\n\n----------------------------------------"
 
 # 3. Custom Model Specification
-echo "TEST 3: Custom Model (gemini-1.5-pro)"
+echo "TEST 3: Custom Model (gemini-2.5-flash)"
 curl -X POST "$URL" \
   -H "Content-Type: application/json" \
   -N \
   -d '{
-    "model": "gemini-1.5-pro",
+    "model": "gemini-2.5-flash",
     "messages": [
       { "role": "user", "content": "Write a 2-line poem about security." }
     ]

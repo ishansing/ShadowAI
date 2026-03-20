@@ -1,0 +1,32 @@
+$ bun run --watch src/index.ts
+Started development server: http://localhost:3000
+<-- POST /v1/chat/completions
+Saving Audit Log: {
+  "id": "f9d0baf0-e2d7-43e6-8462-f0567a31b0c6",
+  "userId": "user_demo",
+  "userEmail": "demo@company.com",
+  "prompt": "What is 2+2?",
+  "wasRedacted": false,
+  "redactedFields": [],
+  "provider": "gemini",
+  "timestamp": "2026-03-20T11:21:33.107Z"
+}
+Forwarding request to provider with model: gemini-2.5-flash
+--> POST /v1/chat/completions [32m200[0m 9ms
+<-- POST /v1/chat/completions
+[AUDIT] Redacting 1 items from user.
+Saving Audit Log: {
+  "id": "3ce2f304-f64b-4cca-9b9a-431ba445e7b3",
+  "userId": "user_demo",
+  "userEmail": "demo@company.com",
+  "prompt": "My secret key is sk-1234567890abcdef1234567890abcdef. What is the capital of Japan?",
+  "wasRedacted": true,
+  "redactedFields": [
+    "API_KEY"
+  ],
+  "provider": "gemini",
+  "timestamp": "2026-03-20T11:21:40.515Z"
+}
+Forwarding request to provider with model: gemini-2.5-flash
+--> POST /v1/chat/completions [32m200[0m 2ms
+error: script "dev" was terminated by signal SIGTERM (Polite quit request)

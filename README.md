@@ -73,7 +73,7 @@ The gateway mimics the OpenAI-compatible chat completion format:
 **Example Request:**
 ```json
 {
-  "model": "gemini-1.5-flash",
+  "model": "gemini-2.5-flash",
   "messages": [
     { "role": "user", "content": "My email is test@example.com" }
   ]

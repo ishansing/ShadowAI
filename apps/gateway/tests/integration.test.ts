@@ -62,7 +62,7 @@ describe("Gateway API Router", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         messages: [{ role: "user", content: "What is the capital of France?" }]
       }),
     });

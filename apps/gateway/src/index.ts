@@ -50,9 +50,10 @@ app.post("/v1/chat/completions", async (c) => {
 
     // 4. FORWARD TO GEMINI
     // We use the modified 'messages' array
-    const modelName = body.model || "gemini-1.5-flash";
+    const modelName = body.model || "gemini-2.5-flash";
+
     console.log(`Forwarding request to provider with model: ${modelName}`);
-    
+
     const result = streamText({
       model: google(modelName),
       messages: messages,
