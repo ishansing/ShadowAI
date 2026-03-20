@@ -1,0 +1,15 @@
+{
+  "name": "@shadow/auth",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "better-auth": "latest",
+    "@shadow/db": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

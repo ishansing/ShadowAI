@@ -1,11 +1,16 @@
 $ bun run --watch src/index.ts
-Started development server: http://localhost:3000
-<-- POST /v1/chat/completions
-[AUDIT] Redacting 1 items from user.
-Forwarding request to provider with model: gemini-2.5-flash
---> POST /v1/chat/completions [32m200[0m 14ms
-<-- POST /v1/chat/completions
-[AUDIT] Redacting 1 items from user.
-Forwarding request to provider with model: gemini-2.5-flash
---> POST /v1/chat/completions [32m200[0m 8ms
+23 | } else if (isServerConfig(entryNamespace?.default)) {
+24 |    var server = globalThis[hmrSymbol];
+25 |    if (server) {
+26 |       server.reload(entryNamespace.default);
+27 |       console.debug(`Reloaded ${server.development ? 'development ' : ''}server: ${server.protocol}://${server.hostname}:${server.port}`);
+28 |       server = globalThis[hmrSymbol] = Bun.serve(entryNamespace.default);
+     ^
+error: Failed to start server. Is port 3000 in use?
+ syscall: "listen",
+   errno: 0,
+    code: "EADDRINUSE"
+
+      at bun:main:28:49
+      at loadAndEvaluateModule (2:1)
 error: script "dev" was terminated by signal SIGTERM (Polite quit request)

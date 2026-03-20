@@ -6,15 +6,38 @@ import { google } from "@ai-sdk/google";
 
 import { scanAndRedact, type AuditLog } from "@shadow/core";
 import { db, auditLogs } from "@shadow/db";
+import { auth, type AuthUser, type AuthSession } from "@shadow/auth";
 
-const app = new Hono();
+type Variables = {
+  user: AuthUser;
+  session: AuthSession;
+};
+
+const app = new Hono<{ Variables: Variables }>();
 
 // Middleware
 app.use("*", logger());
-app.use("*", cors());
+app.use("*", cors({ origin: "http://localhost:3001", credentials: true }));
+
+// 1. Mount Better Auth Handler
+app.on(["GET", "POST"], "/api/auth/**", (c) => auth.handler(c.req.raw));
+
+// 2. Auth Middleware (Protect Routes Below This)
+app.use("/v1/*", async (c, next) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+
+  if (!session) {
+    return c.json({ error: "Unauthorized. Please sign in." }, 401);
+  }
+
+  c.set("user", session.user);
+  c.set("session", session.session);
+  await next();
+});
 
 app.post("/v1/chat/completions", async (c) => {
   try {
+    const user = c.get("user");
     const body = await c.req.json();
     const messages = body.messages || [];
     const lastMessage = messages[messages.length - 1];
@@ -37,11 +60,10 @@ app.post("/v1/chat/completions", async (c) => {
     }
 
     // 3. LOGGING (Async Fire-and-Forget)
-    // We do NOT use 'await' here. We let the promise resolve in the background.
     db.insert(auditLogs)
       .values({
-        userId: "user_demo_123", // Hardcoded for now until Phase 5
-        userEmail: "demo@company.com",
+        userId: user.id,
+        userEmail: user.email,
         prompt: scanResult.original,
         wasRedacted: wasRedacted,
         redactedFields: scanResult.matches.map((m) => m.type),
@@ -53,7 +75,6 @@ app.post("/v1/chat/completions", async (c) => {
       });
 
     // 4. FORWARD TO GEMINI
-    // We use the modified 'messages' array
     const modelName = body.model || "gemini-2.5-flash";
 
     console.log(`Forwarding request to provider with model: ${modelName}`);

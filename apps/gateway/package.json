@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.43",
+    "@shadow/auth": "workspace:*",
     "@shadow/core": "workspace:*",
     "@shadow/db": "workspace:*",
     "ai": "^6.0.116",

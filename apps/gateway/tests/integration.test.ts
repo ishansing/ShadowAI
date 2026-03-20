@@ -22,6 +22,22 @@ mock.module("@ai-sdk/google", () => {
   };
 });
 
+mock.module("@shadow/auth", () => {
+  return {
+    auth: {
+      handler: () => new Response("Mocked Auth Handler"),
+      api: {
+        getSession: async () => {
+          return {
+            session: { id: "sess_123" },
+            user: { id: "test_user_id", email: "test@example.com" }
+          };
+        }
+      }
+    }
+  };
+});
+
 // Import the app AFTER mocking
 import app from "../src/index";
 

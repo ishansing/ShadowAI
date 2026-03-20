@@ -21,3 +21,6 @@ export const auditLogs = pgTable("audit_logs", {
   provider: text("provider").notNull(),
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
+
+export * from "./auth-schema";
+
