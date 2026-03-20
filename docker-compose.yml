@@ -1,4 +1,6 @@
+version: '3.8'
 services:
+  # Your existing Postgres config...
   postgres:
     image: postgres:16-alpine
     container_name: shadow_postgres
@@ -10,6 +12,26 @@ services:
       - "5432:5432"
     volumes:
       - shadow_pg_data:/var/lib/postgresql/data
+
+  # 1. The actual Local Redis Database
+  redis:
+    image: redis:alpine
+    container_name: shadow_redis
+    ports:
+      - "6379:6379"
+
+  # 2. The Upstash REST Proxy (Translates HTTP to Redis TCP)
+  upstash-proxy:
+    image: hiett/serverless-redis-http:latest
+    container_name: shadow_upstash_proxy
+    ports:
+      - "8079:80"
+    environment:
+      - SRH_MODE=env
+      - SRH_TOKEN=local_dev_token
+      - SRH_CONNECTION_STRING=redis://redis:6379 # Connects to the redis container above
+    depends_on:
+      - redis
 
 volumes:
   shadow_pg_data:

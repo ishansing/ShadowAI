@@ -22,5 +22,13 @@ export const auditLogs = pgTable("audit_logs", {
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
+export const apiKeys = pgTable("api_keys", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull(), // Links to the Admin who created it
+  name: text("name").notNull(),      // e.g., "Cursor IDE Key", "Marketing Team"
+  key: text("key").notNull().unique(), // The actual sk-shadow-... key
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export * from "./auth-schema";
 

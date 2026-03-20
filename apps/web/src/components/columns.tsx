@@ -24,7 +24,7 @@ const PromptCell = ({ prompt }: { prompt: string }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <div 
           className="max-w-[400px] truncate font-mono text-xs cursor-pointer hover:text-blue-600 transition-colors"
           title="Click to view full prompt"
