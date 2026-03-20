@@ -7,7 +7,7 @@ export interface AuditLog {
   prompt: string;
   wasRedacted: boolean;
   redactedFields: string[]; // e.g. ["EMAIL", "PHONE"]
-  provider: "openai" | "anthropic";
+  provider: "openai" | "anthropic" | "gemini";
   timestamp: Date;
   metadata?: Record<string, any>;
 }

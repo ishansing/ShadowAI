@@ -13,8 +13,9 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.43",
     "@shadow/core": "workspace:*",
-    "hono": "^4.11.9",
-    "openai": "^6.22.0"
+    "ai": "^6.0.116",
+    "hono": "^4.11.9"
   }
 }

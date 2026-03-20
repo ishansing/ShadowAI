@@ -16,7 +16,7 @@ We will use a **Turborepo** (or Bun Workspaces) structure. This is the industry 
 │       ├── /src
 │       │   ├── index.ts      # Server entry
 │       │   ├── /middleware   # Auth, RateLimit
-│       │   └── /providers    # OpenAI, Anthropic adapters
+│       │   └── /providers    # Vercel AI SDK (OpenAI, Anthropic, etc)
 │       ├── Dockerfile        # Optimized for Bun
 │       └── wrangler.toml     # (Optional) Deploy to Cloudflare Workers
 │
@@ -106,7 +106,7 @@ app.post("/v1/chat/completions", async (c) => {
     timestamp: Date.now(),
   });
 
-  return streamResponse(openaiStream);
+  return result.toTextStreamResponse();
 });
 ```
 
