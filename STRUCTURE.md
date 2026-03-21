@@ -1,131 +1,69 @@
-# Project Structure
+# Project Structure & Data Flow
 
-We will use a **Turborepo** (or Bun Workspaces) structure. This is the industry standard for high-quality TypeScript monorepos.
+This monorepo follows a clean separation between the **Data Plane** (AI Proxy) and the **Control Plane** (Admin Dashboard), connected via a shared core and database layer.
 
 ```text
 /shadow-ai-gateway
-├── package.json              # Root config
-├── turbo.json                # Turborepo pipeline config
+├── package.json              # Root workspace configuration
+├── docker-compose.yml        # Infrastructure: Postgres, Redis, SRH Proxy
 │
 ├── /apps
-│   ├── /web                  # (Next.js 14) - The "Control Plane" Dashboard
-│   │   ├── /app              # App Router: /dashboard, /settings, /logs
-│   │   └── /components       # Shadcn UI components
+│   ├── /web                  # (Vite + React) - The "Control Plane"
+│   │   ├── /src/routes       # TanStack Router: /dashboard, /keys, /policies
+│   │   ├── /src/lib/api.ts   # Hono RPC Client (Type-safe)
+│   │   └── /src/components   # Shadcn UI + TanStack Table
 │   │
-│   └── /gateway              # (Hono + Bun) - The "Data Plane" Proxy
-│       ├── /src
-│       │   ├── index.ts      # Server entry
-│       │   ├── /middleware   # Auth, RateLimit
-│       │   └── /providers    # Vercel AI SDK (OpenAI, Anthropic, etc)
-│       ├── Dockerfile        # Optimized for Bun
-│       └── wrangler.toml     # (Optional) Deploy to Cloudflare Workers
+│   └── /gateway              # (Hono + Bun) - The "Data Plane"
+│       ├── /src/index.ts     # Main router & AI Proxy logic
+│       ├── /src/middleware   # Dual Auth, Rate Limit (Upstash)
+│       └── server.log        # Dev logs
 │
 ├── /packages
-│   ├── /core                 # The Business Logic (Shared)
-│   │   ├── /pii              # Redaction logic (RegEx + NLP)
-│   │   ├── /guard            # The "Pipeline" engine
-│   │   └── /types            # Zod schemas & TypeScript interfaces
+│   ├── /core                 # Business Logic (Shared)
+│   │   ├── /src/pii.ts       # Dynamic PII Redaction Engine
+│   │   └── /src/index.ts     # Shared types
 │   │
 │   ├── /db                   # Database Layer (@shadow/db)
-│   │   ├── /src
-│   │   │   ├── schema.ts     # Drizzle ORM definitions
-│   │   │   └── index.ts      # Client & Connection pooling
-│   │   └── drizzle.config.ts # Drizzle Kit configuration
+│   │   ├── /src/schema.ts    # Drizzle ORM definitions (Audit, Keys, Policies)
+│   │   └── /drizzle          # SQL migration files
 │   │
-│   └── /logger               # Async Logging Service
-│       └── index.ts          # Pushes logs to ClickHouse/Postgres
-│
-└── /docker
-    ├── compose.yml           # Runs Postgres, Redis, and the Apps
-    └── prometheus.yml        # Metrics configuration
+│   └── /auth                 # Auth Configuration (@shadow/auth)
+│       └── /src/index.ts     # Better Auth singleton & Drizzle adapter
 ```
 
-### Key Technical Advancements (TypeScript Edition)
+## 🔄 Core Data Flows
 
-#### 1. The "Pipeline" Pattern (The Trylon Inspiration)
+### 1. The Proxy Flow (Security First)
+When an employee sends a message through the Gateway:
+1.  **Dual Auth Middleware:** Validates either a Virtual API Key (programmatic) or a Browser Cookie (dashboard).
+2.  **Rate Limit Middleware:** Checks Upstash Redis (local proxy) to see if the user has exceeded their 1-minute window.
+3.  **Policy Fetch:** Retrieves the Admin's granular DLP preferences from Postgres.
+4.  **PII Scanning:** The prompt is scanned by the `@shadow/core` engine. Sensitive fields are masked based on the active policy.
+5.  **AI Forwarding:** The **safe, redacted prompt** is sent to Google Gemini 2.5 Flash via the Vercel AI SDK.
+6.  **Async Logging:** A record of the interception is saved to the `audit_logs` table in the background (fire-and-forget).
+7.  **Streaming Response:** The AI's reply is streamed back to the employee instantly.
 
-Instead of a monolithic function, we build a composable pipeline using a generic **`Guard`** interface. This makes your code clean and plugin-ready.
+### 2. The Management Flow (Type-Safe RPC)
+When an Admin uses the Dashboard:
+1.  **Hono RPC Client:** The Vite app uses the `AppType` exported from the Gateway to perform API calls.
+2.  **State Management:** TanStack Query handles caching and optimistic updates for API Keys and Policies.
+3.  **Real-time Config:** Changing a toggle in `/policies` instantly updates the database, affecting all subsequent Proxy Flow requests.
 
-```typescript
-// packages/core/guard/types.ts
-export interface GuardContext {
-  prompt: string;
-  userId: string;
-  metadata: Record<string, any>;
-}
+## 🛠 Technical Stack
 
-export interface GuardResult {
-  allowed: boolean;
-  modifiedPrompt?: string;
-  reason?: string;
-}
+| Layer | Technology |
+| :--- | :--- |
+| **Runtime** | Bun |
+| **Gateway** | Hono |
+| **Dashboard** | Vite + React + TanStack Router/Query |
+| **UI** | Tailwind CSS v4 + Shadcn UI |
+| **AI SDK** | Vercel AI SDK (Google Gemini Provider) |
+| **Auth** | Better Auth |
+| **Database** | PostgreSQL + Drizzle ORM |
+| **Rate Limiting** | Upstash Ratelimit + Redis |
 
-export abstract class BaseGuard {
-  abstract execute(ctx: GuardContext): Promise<GuardResult>;
-}
-```
+## 🚀 Key Advancements
 
-**Implementation:**
-
-```typescript
-// apps/gateway/src/pipeline.ts
-const pipeline = new GuardPipeline([
-  new RateLimitGuard(),
-  new PiiRedactionGuard({ strict: true }), // Stops emails/CCs
-  new SecretKeyGuard(), // Blocks AWS keys or API tokens
-]);
-
-// In your Hono route:
-const result = await pipeline.run({ prompt: userMessage, userId });
-if (!result.allowed) return c.json({ error: result.reason }, 403);
-```
-
-#### 2. "Edge-Ready" Design (Hono)
-
-By using **Hono**, your Gateway isn't just a Node.js server. It allows you to deploy the _exact same code_ to:
-
-- **Bun** (on a \$5 VPS or your Raspberry Pi)
-- **Cloudflare Workers** (Global Edge Network - lowest latency)
-- **AWS Lambda**
-  This is a huge selling point. A client in London hits your London edge node, not a server in Virginia.
-
-#### 3. Async Logging with "Fire-and-Forget"
-
-To keep the chat snappy, we don't await the database write. We use a non-blocking patterns.
-
-```typescript
-// apps/gateway/src/index.ts
-app.post("/v1/chat/completions", async (c) => {
-  // ... process request ...
-
-  // 🚀 Fire-and-forget: Don't await this!
-  // In Bun/Node, this runs in the background.
-  // Ideally, push to a Redis queue here.
-  auditLogger.log({
-    prompt: originalPrompt,
-    redacted: wasRedacted,
-    user: userId,
-    timestamp: Date.now(),
-  });
-
-  return result.toTextStreamResponse();
-});
-```
-
-#### 4. Unified Types (`@shadow/db`)
-
-You define your database schema **once** using **Drizzle ORM** in `packages/db`.
-
-- The **Gateway** imports it to log chats.
-- The **Dashboard** imports it to _view_ chats.
-- If you change a column name, TypeScript breaks _both_ apps at build time, preventing runtime bugs.
-
-### Recommended Stack for You
-
-- **Runtime:** Bun (Super fast startup, great for dev)
-- **Framework:** Hono (Standard for modern TS APIs)
-- **Database:** Postgres (Reliable) + Drizzle ORM (Best TS DX)
-- **Frontend:** Next.js + Shadcn UI (Beautiful, fast admin panels)
-- **Queue:** Redis (for robust async logging, optional for MVP)
-
-<div align="center">⁂</div>
+- **Programmatic Access:** Employees can use the gateway in CLI tools or IDEs like Cursor using `sk-shadow-` keys.
+- **Local-First Dev:** Using the **Upstash SRH Proxy** allows developers to test production-grade rate limiting without a cloud dependency.
+- **Dynamic DLP:** The PII engine is no longer a static filter; it is a policy-driven engine that adapts to user needs.

@@ -1,76 +1,108 @@
 # Shadow AI Gateway
 
-A high-performance, edge-ready AI proxy built with **Bun**, **Hono**, and the **Vercel AI SDK**. It provides automatic PII (Personally Identifiable Information) detection and redaction to ensure secure LLM interactions.
+A high-performance, edge-ready AI proxy built with **Bun**, **Hono**, and the **Vercel AI SDK**. It provides automatic PII (Personally Identifiable Information) detection, granular security policies, and programmatic access via Virtual API Keys.
 
-## Project Structure
+## 🏗 Architecture
 
-- `apps/gateway`: The Hono-based proxy server (Data Plane).
-- `packages/core`: Shared library containing the PII redaction engine and audit logging types.
-- `apps/web`: (Planned) Control Plane dashboard.
+```mermaid
+graph TD
+    Client[Employees / Chat Apps] -->|sk-shadow-xxx| Gateway
+    Client -->|Browser Session| Gateway
+    
+    subgraph "Data Plane (Gateway)"
+        Gateway[Hono Proxy]
+        Auth[Dual Auth: API Keys + Better Auth]
+        Limit[Upstash Rate Limiting]
+        DLP[PII Redaction Engine]
+        Policy[Granular Policy Check]
+        
+        Gateway --> Auth
+        Auth --> Limit
+        Limit --> Policy
+        Policy --> DLP
+    end
+    
+    DLP -->|Redacted Prompt| Gemini[Google Gemini 2.5 Flash]
+    
+    subgraph "Control Plane (Dashboard)"
+        Dashboard[Vite + TanStack Router]
+        RPC[Hono RPC Client]
+        Dashboard --> RPC
+    end
+    
+    RPC -->|Manage Keys / Policies| Gateway
+    Gateway -->|Async Audit Log| Postgres[(PostgreSQL)]
+    Limit -->|Window State| Redis[(Local Redis Proxy)]
+```
 
-## Features
+## 🚀 Features
 
 - **PII Redaction:** Automatically detects and masks Emails, API Keys, Phone Numbers, Credit Cards, SSNs, and IP Addresses.
-- **Provider Agnostic:** Powered by Vercel AI SDK (defaulting to Google Gemini).
-- **Audit Logging:** Logs all requests, detections, and redaction status (Async/Non-blocking).
-- **Edge Ready:** Built on Hono for deployment to Bun, Cloudflare Workers, or AWS Lambda.
+- **Granular DLP Policies:** Admins can toggle specific redaction rules (e.g., allow Emails for Marketing, block for Devs).
+- **Virtual API Keys:** Generate `sk-shadow-...` keys for programmatic access in IDEs (Cursor) or CLI tools.
+- **Dual Authentication:** Supports both Better Auth (browser sessions) and Bearer Token (API keys).
+- **Edge-Ready Rate Limiting:** Powered by Upstash Redis with a local SRH Docker proxy for offline development.
+- **Type-Safe RPC:** End-to-end type safety between Gateway and Dashboard using Hono RPC.
+- **Audit Logging:** Non-blocking, asynchronous logging of all violations to PostgreSQL.
 
-## Getting Started
+## 📂 Project Structure
+
+- `apps/gateway`: Hono-based proxy server.
+- `apps/web`: Vite + React SPA dashboard.
+- `packages/core`: PII engine and shared business logic.
+- `packages/db`: Drizzle ORM schema and migrations.
+- `packages/auth`: Shared Better Auth configuration.
+
+## 🛠 Getting Started
 
 ### Prerequisites
+- [Bun](https://bun.sh) installed.
+- Docker (for Postgres and Redis).
+- Google Gemini API Key.
 
-- [Bun](https://bun.sh) installed (v1.1.0 or higher recommended).
-- A Google Generative AI (Gemini) API Key.
-
-### Installation
-
+### 1. Setup Infrastructure
 ```bash
-# Install dependencies for all workspaces
+docker compose up -d
+```
+
+### 2. Install Dependencies
+```bash
 bun install
 ```
 
-### Environment Setup
-
-Create a `.env` file in `apps/gateway/` (or set in your shell):
-
+### 3. Environment Configuration
+Create a `.env` in `apps/gateway/`:
 ```bash
-GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key_here
+DATABASE_URL="postgresql://shadow_admin:shadow_password@localhost:5432/shadow_ai"
+GOOGLE_GENERATIVE_AI_API_KEY="your_key"
+BETTER_AUTH_URL="http://localhost:3000"
+UPSTASH_REDIS_REST_URL="http://localhost:8079"
+UPSTASH_REDIS_REST_TOKEN="local_dev_token"
 ```
 
-### Running the Gateway
-
+### 4. Run the Stack
 ```bash
-# Start the gateway in development mode
+# Start Gateway (Port 3000) and Web Dashboard (Port 3001)
 bun run dev
 ```
-The server will start on `http://localhost:3000`.
 
-## Testing
+## 🧪 Testing
 
-### Automated Tests (Integration)
-We use `bun:test` for integration testing of the core engine and the gateway routes.
-
+### Automated Integration Tests
 ```bash
-# Run tests from the gateway directory
-cd apps/gateway
-bun test
+cd apps/gateway && bun test
 ```
 
-### Manual Tests (CURL)
-A script is provided to test the gateway's response and redaction logic manually.
-
+### Manual Rate Limit Test
 ```bash
-# Run the manual test suite (requires server to be running)
-./apps/gateway/tests/manual_test.sh
+./apps/gateway/tests/test_ratelimit.sh sk-shadow-YOUR_KEY
 ```
 
-## API Usage
+## 📖 API Usage
 
-The gateway mimics the OpenAI-compatible chat completion format:
+**Endpoint:** `POST /v1/chat/completions`  
+**Auth:** `Authorization: Bearer sk-shadow-xxx`
 
-**Endpoint:** `POST /v1/chat/completions`
-
-**Example Request:**
 ```json
 {
   "model": "gemini-2.5-flash",
@@ -79,4 +111,3 @@ The gateway mimics the OpenAI-compatible chat completion format:
   ]
 }
 ```
-*Note: The email will be redacted before being sent to the LLM.*
