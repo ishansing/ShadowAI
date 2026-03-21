@@ -25,7 +25,7 @@ export const rateLimitMiddleware = async (c: Context, next: Next) => {
   const identifier = user?.id || c.req.header('x-forwarded-for') || "anonymous";
 
   // 3. Check the limit
-  const { success, pending, limit, remaining, reset } = await ratelimit.limit(identifier);
+  const { success, limit, remaining, reset } = await ratelimit.limit(identifier);
   
   console.log(`[RateLimit] User: ${identifier}, Success: ${success}, Remaining: ${remaining}`);
 

@@ -6,8 +6,8 @@ import { google } from "@ai-sdk/google";
 import { desc, eq } from "drizzle-orm";
 import crypto from "crypto";
 
-import { scanAndRedact } from "@shadow/core";
-import { db, auditLogs, apiKeys } from "@shadow/db";
+import { scanAndRedact, defaultPolicy } from "@shadow/core";
+import { db, auditLogs, apiKeys, policies } from "@shadow/db";
 import { auth, type AuthUser, type AuthSession } from "@shadow/auth";
 import { rateLimitMiddleware } from "./middleware/ratelimit";
 
@@ -81,7 +81,7 @@ app.use("/api/logs", async (c, next) => {
   await next();
 });
 
-// 3. GET Logs Route (Protected)
+// 3. Admin API Routes (Protected)
 const routes = app
   .get("/api/logs", async (c) => {
     const logs = await db
@@ -123,6 +123,32 @@ const routes = app
       .returning();
 
     return c.json(newKey);
+  })
+  .use("/api/policies/*", async (c, next) => {
+    const session = await auth.api.getSession({ headers: c.req.raw.headers });
+    if (!session) return c.json({ error: "Unauthorized" }, 401);
+    c.set("user", session.user);
+    await next();
+  })
+  .get("/api/policies", async (c) => {
+    const user = c.get("user");
+    let [policy] = await db.select().from(policies).where(eq(policies.userId, user.id));
+    
+    if (!policy) {
+      [policy] = await db.insert(policies).values({ userId: user.id }).returning();
+    }
+    return c.json(policy);
+  })
+  .post("/api/policies", async (c) => {
+    const user = c.get("user");
+    const updates = await c.req.json();
+    
+    const [updatedPolicy] = await db.insert(policies)
+      .values({ userId: user.id, ...updates })
+      .onConflictDoUpdate({ target: policies.userId, set: updates })
+      .returning();
+      
+    return c.json(updatedPolicy);
   });
 
 // 5. Chat Completions Route (Protected by Dual Auth)
@@ -137,9 +163,14 @@ app.post("/v1/chat/completions", async (c) => {
       return c.json({ error: "Invalid request format" }, 400);
     }
 
+    // FETCH THE ADMIN'S CUSTOM POLICY
+    let [userPolicy] = await db.select().from(policies).where(eq(policies.userId, user.id));
+    const currentPolicy = userPolicy || defaultPolicy;
+
     // 1. THE AUDIT STEP: Scan the user's prompt
-    const scanResult = scanAndRedact(lastMessage.content);
+    const scanResult = scanAndRedact(lastMessage.content, currentPolicy);
     const wasRedacted = scanResult.matches.length > 0;
+
 
     // 2. THE ACTION: Modify the request if needed
     if (wasRedacted) {

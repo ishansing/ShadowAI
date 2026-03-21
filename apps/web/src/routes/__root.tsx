@@ -19,6 +19,9 @@ export const Route = createRootRouteWithContext<{
           <Link to="/keys" className="text-sm font-medium text-gray-600 hover:text-black [&.active]:text-black [&.active]:underline underline-offset-4">
             API Keys
           </Link>
+          <Link to="/policies" className="text-sm font-medium text-gray-600 hover:text-black [&.active]:text-black [&.active]:underline underline-offset-4">
+            Policies
+          </Link>
         </nav>
       </div>
       

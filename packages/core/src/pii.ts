@@ -50,20 +50,50 @@ const PATTERNS: Record<PiiType, RegExp> = {
   PHONE: /(\+?\d{1,2}\s?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/g,
 };
 
+export interface PolicyConfig {
+  blockEmails: boolean;
+  blockCreditCards: boolean;
+  blockSSN: boolean;
+  blockApiKeys: boolean;
+  blockPhones: boolean;
+}
+
+// Default strict policy
+export const defaultPolicy: PolicyConfig = {
+  blockEmails: true,
+  blockCreditCards: true,
+  blockSSN: true,
+  blockApiKeys: true,
+  blockPhones: true,
+};
+
 // ------------------------------------------------------------------
 // THE ENGINE
 // ------------------------------------------------------------------
 export function scanAndRedact(
   text: string,
+  policy: PolicyConfig = defaultPolicy,
 ): RedactionResult {
   let redactedText = text;
   const matches: PiiMatch[] = [];
   let riskScore = 0;
 
+  // Map the policy flags to our PII types
+  const activeTypes = new Set<string>();
+  if (policy.blockApiKeys) activeTypes.add("API_KEY");
+  if (policy.blockCreditCards) activeTypes.add("CREDIT_CARD");
+  if (policy.blockEmails) activeTypes.add("EMAIL");
+  if (policy.blockSSN) activeTypes.add("SSN");
+  if (policy.blockPhones) activeTypes.add("PHONE");
+
   // Iterate over each PII type
   for (const [type, regex] of Object.entries(PATTERNS)) {
+    // Only scan if the policy says we should block this type!
+    if (!activeTypes.has(type)) continue;
+
     // Reset regex state
     regex.lastIndex = 0;
+
 
     const found = text.match(regex);
 

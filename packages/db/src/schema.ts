@@ -30,5 +30,16 @@ export const apiKeys = pgTable("api_keys", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const policies = pgTable("policies", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull().unique(), // One policy profile per Admin/Workspace
+  blockEmails: boolean("block_emails").default(true).notNull(),
+  blockCreditCards: boolean("block_credit_cards").default(true).notNull(),
+  blockSSN: boolean("block_ssn").default(true).notNull(),
+  blockApiKeys: boolean("block_api_keys").default(true).notNull(),
+  blockPhones: boolean("block_phones").default(false).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export * from "./auth-schema";
 
