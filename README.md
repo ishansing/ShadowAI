@@ -2,7 +2,7 @@
 
 A high-performance, edge-ready AI proxy built with **Bun**, **Hono**, and the **Vercel AI SDK**. It provides automatic PII (Personally Identifiable Information) detection, granular security policies, and programmatic access via Virtual API Keys.
 
-## 🏗 Architecture
+## Architecture
 
 ```mermaid
 graph TD
@@ -35,7 +35,7 @@ graph TD
     Limit -->|Window State| Redis[(Local Redis Proxy)]
 ```
 
-## 🚀 Features
+## Features
 
 - **PII Redaction:** Automatically detects and masks Emails, API Keys, Phone Numbers, Credit Cards, SSNs, and IP Addresses.
 - **Granular DLP Policies:** Admins can toggle specific redaction rules (e.g., allow Emails for Marketing, block for Devs).
@@ -45,7 +45,7 @@ graph TD
 - **Type-Safe RPC:** End-to-end type safety between Gateway and Dashboard using Hono RPC.
 - **Audit Logging:** Non-blocking, asynchronous logging of all violations to PostgreSQL.
 
-## 📂 Project Structure
+## Project Structure
 
 - `apps/gateway`: Hono-based proxy server.
 - `apps/web`: Vite + React SPA dashboard.
@@ -53,7 +53,7 @@ graph TD
 - `packages/db`: Drizzle ORM schema and migrations.
 - `packages/auth`: Shared Better Auth configuration.
 
-## 🛠 Getting Started
+## Getting Started
 
 ### Prerequisites
 - [Bun](https://bun.sh) installed.
@@ -86,7 +86,7 @@ UPSTASH_REDIS_REST_TOKEN="local_dev_token"
 bun run dev
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Automated Integration Tests
 ```bash
@@ -98,7 +98,7 @@ cd apps/gateway && bun test
 ./apps/gateway/tests/test_ratelimit.sh sk-shadow-YOUR_KEY
 ```
 
-## 📖 API Usage
+## API Usage
 
 **Endpoint:** `POST /v1/chat/completions`  
 **Auth:** `Authorization: Bearer sk-shadow-xxx`
