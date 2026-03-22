@@ -8,28 +8,28 @@ A high-performance, edge-ready AI proxy built with **Bun**, **Hono**, and the **
 graph TD
     Client[Employees / Chat Apps] -->|sk-shadow-xxx| Gateway
     Client -->|Browser Session| Gateway
-    
+
     subgraph "Data Plane (Gateway)"
         Gateway[Hono Proxy]
         Auth[Dual Auth: API Keys + Better Auth]
         Limit[Upstash Rate Limiting]
         DLP[PII Redaction Engine]
         Policy[Granular Policy Check]
-        
+
         Gateway --> Auth
         Auth --> Limit
         Limit --> Policy
         Policy --> DLP
     end
-    
+
     DLP -->|Redacted Prompt| Gemini[Google Gemini 2.5 Flash]
-    
+
     subgraph "Control Plane (Dashboard)"
         Dashboard[Vite + TanStack Router]
         RPC[Hono RPC Client]
         Dashboard --> RPC
     end
-    
+
     RPC -->|Manage Keys / Policies| Gateway
     Gateway -->|Async Audit Log| Postgres[(PostgreSQL)]
     Limit -->|Window State| Redis[(Local Redis Proxy)]
@@ -56,22 +56,27 @@ graph TD
 ## Getting Started
 
 ### Prerequisites
+
 - [Bun](https://bun.sh) installed.
 - Docker (for Postgres and Redis).
 - Google Gemini API Key.
 
 ### 1. Setup Infrastructure
+
 ```bash
 docker compose up -d
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 bun install
 ```
 
 ### 3. Environment Configuration
+
 Create a `.env` in `apps/gateway/`:
+
 ```bash
 DATABASE_URL="postgresql://shadow_admin:shadow_password@localhost:5432/shadow_ai"
 GOOGLE_GENERATIVE_AI_API_KEY="your_key"
@@ -81,6 +86,7 @@ UPSTASH_REDIS_REST_TOKEN="local_dev_token"
 ```
 
 ### 4. Run the Stack
+
 ```bash
 # Start Gateway (Port 3000) and Web Dashboard (Port 3001)
 bun run dev
@@ -89,11 +95,13 @@ bun run dev
 ## Testing
 
 ### Automated Integration Tests
+
 ```bash
 cd apps/gateway && bun test
 ```
 
 ### Manual Rate Limit Test
+
 ```bash
 ./apps/gateway/tests/test_ratelimit.sh sk-shadow-YOUR_KEY
 ```
@@ -106,8 +114,6 @@ cd apps/gateway && bun test
 ```json
 {
   "model": "gemini-2.5-flash",
-  "messages": [
-    { "role": "user", "content": "My email is test@example.com" }
-  ]
+  "messages": [{ "role": "user", "content": "My email is test@example.com" }]
 }
 ```
