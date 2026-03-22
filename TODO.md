@@ -1,5 +1,5 @@
 # TODO
 
-[ ] Better role management.
-[ ] Chat page.
-[ ] UI improvements and Visual data.
+- [ ] Better role management.
+- [ ] Chat page.
+- [ ] UI improvements and Visual data.
