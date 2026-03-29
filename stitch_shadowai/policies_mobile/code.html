@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI_PROXY_SYSTEM - DLP Policies</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#474747",
+              "primary": "#ffffff",
+              "surface-container": "#201f1f",
+              "on-secondary": "#1a1c1c",
+              "inverse-on-surface": "#313030",
+              "on-surface": "#e5e2e1",
+              "primary-fixed-dim": "#454747",
+              "on-tertiary": "#1b1c1c",
+              "surface": "#131313",
+              "on-secondary-fixed": "#1a1c1c",
+              "background": "#131313",
+              "secondary": "#c6c6c6",
+              "surface-variant": "#353534",
+              "surface-tint": "#c6c6c7",
+              "on-error": "#690005",
+              "secondary-fixed-dim": "#ababab",
+              "surface-container-lowest": "#0e0e0e",
+              "outline-variant": "#474747",
+              "outline": "#919191",
+              "surface-container-highest": "#353534",
+              "on-primary": "#1a1c1c",
+              "secondary-fixed": "#c6c6c6",
+              "on-tertiary-fixed": "#ffffff",
+              "on-primary-container": "#000000",
+              "error-container": "#93000a",
+              "tertiary-fixed": "#5f5e5e",
+              "tertiary": "#e4e2e1",
+              "primary-fixed": "#5d5f5f",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "on-tertiary-container": "#000000",
+              "on-secondary-fixed-variant": "#3a3c3c",
+              "tertiary-container": "#929090",
+              "inverse-primary": "#5d5f5f",
+              "surface-container-low": "#1c1b1b",
+              "surface-bright": "#3a3939",
+              "on-tertiary-fixed-variant": "#e4e2e1",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-high": "#2a2a2a",
+              "on-primary-fixed": "#ffffff",
+              "on-error-container": "#ffdad6",
+              "error": "#ffb4ab",
+              "on-surface-variant": "#c6c6c6",
+              "secondary-container": "#454747",
+              "surface-dim": "#131313",
+              "on-background": "#e5e2e1",
+              "primary-container": "#d4d4d4",
+              "on-secondary-container": "#e2e2e2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#131313] flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white" data-icon="terminal">terminal</span>
+<h1 class="font-headline font-bold uppercase tracking-tighter text-xl font-black text-white tracking-widest">AI_PROXY_SYSTEM</h1>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/20">
+<img alt="User" data-alt="minimalist avatar of a person with dark hair and glasses in a professional tech-themed illustrative style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqmG3PmP273174KhTnHT-3nME9C98NsUhyA-vwIe3Zg-9YWXwc_xfohmnfEJG33nqBknfQ7v5KT_G8uDJh6FxTS1d45kYflJlyf0u5bx6pz8UBKSeB-GO8m86aki9x3luFtV-ugP6ygZAzmr1UJXtAUPXqEDQE_BAR-UoLCKgleSGNA4i6YgrrD1bIY86OhRXYuDS8KaCzR1eRqN8KNxNB3Amtx7BJbegITQWhriY12mxVcRGbpU327O4T9vIk7GpI7K3Eo4YtQ3yy"/>
+</div>
+</header>
+<main class="pt-20 px-4 space-y-6">
+<!-- Hero Section -->
+<section class="mt-4">
+<div class="space-y-1">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline">SECURITY_MODULE</span>
+<h2 class="font-headline text-4xl font-extrabold text-white tracking-tight">DLP POLICIES</h2>
+</div>
+</section>
+<!-- Search & Filter Cluster -->
+<section class="space-y-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container-lowest border-none py-4 pl-12 pr-4 font-label text-xs tracking-widest focus:ring-1 focus:ring-primary/40 text-white placeholder:text-outline/50 rounded-lg" placeholder="SEARCH RULES..." type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
+<button class="flex-none px-4 py-2 bg-primary text-on-primary font-label text-[10px] font-bold uppercase tracking-widest rounded-lg">ALL_RULES</button>
+<button class="flex-none px-4 py-2 bg-surface-container-low text-secondary font-label text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors rounded-lg">PII</button>
+<button class="flex-none px-4 py-2 bg-surface-container-low text-secondary font-label text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors rounded-lg">FINANCIAL</button>
+<button class="flex-none px-4 py-2 bg-surface-container-low text-secondary font-label text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors rounded-lg">SECRET_KEYS</button>
+</div>
+</section>
+<!-- Policy Grid -->
+<section class="grid grid-cols-1 gap-4">
+<!-- Email Policy -->
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary group hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<span class="font-label text-[9px] font-bold text-outline uppercase tracking-widest">ID: DLP_EML_01</span>
+<h3 class="font-headline text-lg font-bold text-white tracking-tight">EMAIL_ADDRESSES</h3>
+</div>
+<div class="w-10 h-6 bg-primary rounded-full relative p-1 cursor-pointer">
+<div class="w-4 h-4 bg-on-primary rounded-full absolute right-1"></div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 items-end">
+<div class="flex-1 space-y-1">
+<p class="font-body text-xs text-secondary leading-relaxed">Detects personal and corporate email formats in prompt streams.</p>
+<div class="pt-2 flex items-center gap-2">
+<span class="font-label text-[10px] font-bold text-outline">ACTION:</span>
+<span class="font-label text-[10px] font-bold text-white bg-surface-container-highest px-2 py-0.5">REDACT_MASH</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-white transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- API Keys Policy -->
+<div class="bg-surface-container-low p-5 rounded-lg group hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<span class="font-label text-[9px] font-bold text-outline uppercase tracking-widest">ID: DLP_API_04</span>
+<h3 class="font-headline text-lg font-bold text-white tracking-tight">API_SECRET_KEYS</h3>
+</div>
+<div class="w-10 h-6 bg-primary rounded-full relative p-1 cursor-pointer">
+<div class="w-4 h-4 bg-on-primary rounded-full absolute right-1"></div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 items-end">
+<div class="flex-1 space-y-1">
+<p class="font-body text-xs text-secondary leading-relaxed">High-entropy string matching for AWS, Stripe, and OpenAI keys.</p>
+<div class="pt-2 flex items-center gap-2">
+<span class="font-label text-[10px] font-bold text-outline">ACTION:</span>
+<span class="font-label text-[10px] font-bold text-white bg-surface-container-highest px-2 py-0.5">BLOCK_REQUEST</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-white transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- SSN Policy -->
+<div class="bg-surface-container-low p-5 rounded-lg group hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<span class="font-label text-[9px] font-bold text-outline uppercase tracking-widest">ID: DLP_GOV_12</span>
+<h3 class="font-headline text-lg font-bold text-white tracking-tight">US_SSN_PATTERNS</h3>
+</div>
+<div class="w-10 h-6 bg-surface-container-highest rounded-full relative p-1 cursor-pointer">
+<div class="w-4 h-4 bg-outline rounded-full absolute left-1"></div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 items-end">
+<div class="flex-1 space-y-1">
+<p class="font-body text-xs text-secondary/60 leading-relaxed">Identifies Social Security numbers via Regex and Luhn validation.</p>
+<div class="pt-2 flex items-center gap-2">
+<span class="font-label text-[10px] font-bold text-outline/50">ACTION:</span>
+<span class="font-label text-[10px] font-bold text-white/50 bg-surface-container-highest/50 px-2 py-0.5">LOG_ONLY</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline/40 group-hover:text-white transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Credit Cards Policy -->
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary group hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<span class="font-label text-[9px] font-bold text-outline uppercase tracking-widest">ID: DLP_FIN_09</span>
+<h3 class="font-headline text-lg font-bold text-white tracking-tight">CREDIT_CARD_DATA</h3>
+</div>
+<div class="w-10 h-6 bg-primary rounded-full relative p-1 cursor-pointer">
+<div class="w-4 h-4 bg-on-primary rounded-full absolute right-1"></div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 items-end">
+<div class="flex-1 space-y-1">
+<p class="font-body text-xs text-secondary leading-relaxed">PCI-DSS compliance rule for Visa, Mastercard, and AMEX detection.</p>
+<div class="pt-2 flex items-center gap-2">
+<span class="font-label text-[10px] font-bold text-outline">ACTION:</span>
+<span class="font-label text-[10px] font-bold text-white bg-surface-container-highest px-2 py-0.5">REDACT_MASH</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-white transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Stats Panel -->
+<section class="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10">
+<h4 class="font-label text-[10px] font-bold text-outline uppercase tracking-widest mb-4">TRAFFIC_INSPECTION_SUMMARY</h4>
+<div class="grid grid-cols-2 gap-6">
+<div class="space-y-1">
+<p class="text-3xl font-headline font-black text-white">4.2M</p>
+<p class="font-label text-[8px] text-outline uppercase tracking-tighter">TOKENS_SCANNED_24H</p>
+</div>
+<div class="space-y-1">
+<p class="text-3xl font-headline font-black text-white">128</p>
+<p class="font-label text-[8px] text-outline uppercase tracking-tighter">LEAKS_PREVENTED</p>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/10">
+<button class="w-full flex items-center justify-between group">
+<span class="font-label text-[10px] font-bold text-white uppercase tracking-widest group-hover:underline">VIEW_FULL_SECURITY_LOGS</span>
+<span class="material-symbols-outlined text-outline" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-[#131313] z-50 border-t border-[#474747]/20">
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest">OVERVIEW</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white bg-gradient-to-br from-white to-[#d4d4d4] text-[#1a1c1c] rounded-sm px-4 py-1 translate-y-[-2px] duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest">POLICIES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="vpn_key">vpn_key</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest">KEYS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="terminal">terminal</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest">LOGS</span>
+</a>
+</nav>
+</body></html>

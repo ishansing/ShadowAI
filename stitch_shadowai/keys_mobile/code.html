@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI_PROXY_SYSTEM - Virtual Keys</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#474747",
+                        "primary": "#ffffff",
+                        "surface-container": "#201f1f",
+                        "on-secondary": "#1a1c1c",
+                        "inverse-on-surface": "#313030",
+                        "on-surface": "#e5e2e1",
+                        "primary-fixed-dim": "#454747",
+                        "on-tertiary": "#1b1c1c",
+                        "surface": "#131313",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "background": "#131313",
+                        "secondary": "#c6c6c6",
+                        "surface-variant": "#353534",
+                        "surface-tint": "#c6c6c7",
+                        "on-error": "#690005",
+                        "secondary-fixed-dim": "#ababab",
+                        "surface-container-lowest": "#0e0e0e",
+                        "outline-variant": "#474747",
+                        "outline": "#919191",
+                        "surface-container-highest": "#353534",
+                        "on-primary": "#1a1c1c",
+                        "secondary-fixed": "#c6c6c6",
+                        "on-tertiary-fixed": "#ffffff",
+                        "on-primary-container": "#000000",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#5f5e5e",
+                        "tertiary": "#e4e2e1",
+                        "primary-fixed": "#5d5f5f",
+                        "on-primary-fixed-variant": "#e2e2e2",
+                        "on-tertiary-container": "#000000",
+                        "on-secondary-fixed-variant": "#3a3c3c",
+                        "tertiary-container": "#929090",
+                        "inverse-primary": "#5d5f5f",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-bright": "#3a3939",
+                        "on-tertiary-fixed-variant": "#e4e2e1",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "on-primary-fixed": "#ffffff",
+                        "on-error-container": "#ffdad6",
+                        "error": "#ffb4ab",
+                        "on-surface-variant": "#c6c6c6",
+                        "secondary-container": "#454747",
+                        "surface-dim": "#131313",
+                        "on-background": "#e5e2e1",
+                        "primary-container": "#d4d4d4",
+                        "on-secondary-container": "#e2e2e2"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .technical-grid {
+            background-image: radial-gradient(circle, #474747 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-position: center;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#131313] flex justify-between items-center px-6 h-16 w-full text-white">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white" data-icon="terminal">terminal</span>
+<h1 class="font-manrope font-bold uppercase tracking-tighter text-xl font-black text-white tracking-widest">AI_PROXY_SYSTEM</h1>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/30">
+<img alt="User" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a tech developer in minimalist dark attire against a neutral gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSPS_1V8VJx0UjdetWbgTHQLtLEYgp23ftJYzND8sJAt71spYiHvaoi3VywL8OMeYOBnP_8Ok_cfJ2JUFNxXkPyVvKy4HTNWV_A2wH1AYcXoIQ37aI-RNwu5zqykpKDBnpJF5enn2beFEVY0UIl9gu_DlQ8Y69ouveuZ1ZpwbrpufSb3Mp_UAYggncLgxebPonIFrE4hcmWSGRHB8xGng_WoOr_3Wfxb5km4L1u0DFZdLSzUWvNAFq-5GWDk-qyyG7lBpdhLDz0Rx2"/>
+</div>
+</header>
+<main class="flex-grow pt-20 pb-24 px-4 overflow-x-hidden technical-grid">
+<!-- Summary Metrics -->
+<section class="grid grid-cols-2 gap-2 mb-8">
+<div class="bg-surface-container-low p-4 flex flex-col justify-between h-32 border-l-2 border-primary">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">TOTAL_KEYS</span>
+<div class="flex flex-col">
+<span class="font-headline text-3xl font-extrabold text-primary tracking-tighter">14</span>
+<span class="font-label text-[10px] text-primary/40">+2_THIS_MONTH</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 flex flex-col justify-between h-32">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">ACTIVE_SESSIONS</span>
+<div class="flex flex-col">
+<span class="font-headline text-3xl font-extrabold text-primary tracking-tighter">1.2K</span>
+<span class="font-label text-[10px] text-primary/40">LIVE_METRIC</span>
+</div>
+</div>
+</section>
+<!-- Generate Key Action (Static Version for layout) -->
+<div class="mb-6">
+<button class="w-full bg-gradient-to-br from-white to-[#d4d4d4] text-on-primary py-4 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-transform duration-100">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'FILL' 0;">add</span>
+<span class="font-label font-bold uppercase tracking-widest">GENERATE NEW KEY</span>
+</button>
+</div>
+<!-- Key List -->
+<section class="space-y-4">
+<div class="flex justify-between items-center mb-2 px-1">
+<h2 class="font-label text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant">MANAGED_IDENTITIES</h2>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="filter_list">filter_list</span>
+</div>
+<!-- Key Card 1 -->
+<div class="bg-surface-container-low p-5 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-30 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="more_vert">more_vert</span>
+</div>
+<div class="mb-4">
+<h3 class="font-headline text-lg font-bold text-primary mb-1">PROD_MASTER_GATEWAY</h3>
+<div class="flex items-center gap-2">
+<code class="font-label text-[11px] bg-surface-container-lowest px-2 py-1 text-on-surface-variant">sk_live_••••••3a2f</code>
+<span class="material-symbols-outlined text-[14px] text-outline cursor-pointer" data-icon="content_copy">content_copy</span>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(255,255,255,0.4)]"></span>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary">FULL_READ_WRITE</span>
+</div>
+<div class="font-label text-[10px] text-on-surface-variant">CREATED: 12_OCT_2023</div>
+</div>
+<div class="text-right">
+<div class="font-label text-[10px] text-on-surface-variant mb-1 uppercase tracking-tighter">USAGE_24H</div>
+<div class="flex gap-0.5 items-end h-6">
+<div class="w-1 bg-outline-variant h-2"></div>
+<div class="w-1 bg-outline-variant h-3"></div>
+<div class="w-1 bg-primary h-5"></div>
+<div class="w-1 bg-primary h-6"></div>
+<div class="w-1 bg-outline-variant h-4"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Key Card 2 -->
+<div class="bg-surface-container-low p-5 border-l border-outline-variant/20">
+<div class="mb-4">
+<h3 class="font-headline text-lg font-bold text-primary mb-1">STAGING_ENV_01</h3>
+<div class="flex items-center gap-2">
+<code class="font-label text-[11px] bg-surface-container-lowest px-2 py-1 text-on-surface-variant">sk_test_••••••8k91</code>
+<span class="material-symbols-outlined text-[14px] text-outline" data-icon="content_copy">content_copy</span>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">READ_ONLY</span>
+</div>
+<div class="font-label text-[10px] text-on-surface-variant">CREATED: 01_NOV_2023</div>
+</div>
+<div class="text-right">
+<div class="font-label text-[10px] text-on-surface-variant mb-1 uppercase tracking-tighter">USAGE_24H</div>
+<div class="flex gap-0.5 items-end h-6">
+<div class="w-1 bg-outline-variant h-1"></div>
+<div class="w-1 bg-outline-variant h-1"></div>
+<div class="w-1 bg-outline-variant h-1"></div>
+<div class="w-1 bg-outline-variant h-2"></div>
+<div class="w-1 bg-outline-variant h-1"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Key Card 3 (Revoked State) -->
+<div class="bg-surface-container-low/50 p-5 border-l border-error/30 opacity-60">
+<div class="mb-4">
+<div class="flex items-center gap-2 mb-1">
+<h3 class="font-headline text-lg font-bold text-on-surface-variant line-through">LEGACY_V1_BRIDGE</h3>
+<span class="font-label text-[8px] bg-error-container text-on-error-container px-1 py-0.5">REVOKED</span>
+</div>
+<code class="font-label text-[11px] text-on-surface-variant">••••••••••••••••</code>
+</div>
+<div class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">DEACTIVATED_15_NOV</div>
+</div>
+</section>
+<!-- Performance Stats Overlay/Section -->
+<section class="mt-12 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10">
+<h2 class="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary mb-6 flex items-center gap-2">
+<span class="w-2 h-2 bg-primary animate-pulse"></span>
+                LATENCY_MONITOR
+            </h2>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">US_EAST_PROX</span>
+<span class="font-label text-[10px] text-primary">124MS</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high">
+<div class="bg-primary h-full w-[45%] shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">EU_WEST_EDGE</span>
+<span class="font-label text-[10px] text-primary">89MS</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high">
+<div class="bg-primary h-full w-[30%] shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
+</div>
+</div>
+<div class="bg-surface-container p-4 rounded-lg">
+<p class="font-label text-[9px] text-on-surface-variant uppercase leading-relaxed tracking-wider">
+                        STATUS: ALL SYSTEMS NOMINAL. TRAFFIC ENCRYPTED VIA AES-256-GCM. 
+                        ROTATION POLICY ENFORCED FOR KEYS OVER 90 DAYS.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-[#131313] z-50 border-t border-[#474747]/20">
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest">OVERVIEW</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="security">security</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest">POLICIES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white bg-gradient-to-br from-white to-[#d4d4d4] text-[#1a1c1c] rounded-sm px-4 py-1 translate-y-[-2px] duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="vpn_key">vpn_key</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest">KEYS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="terminal">terminal</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest">LOGS</span>
+</a>
+</nav>
+<!-- FAB for Key Generation (Visible Contextually) -->
+<button class="md:hidden fixed bottom-24 right-6 w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-2xl active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="vpn_key" data-weight="fill" style="font-variation-settings: 'FILL' 1;">vpn_key</span>
+</button>
+</body></html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI_PROXY_SYSTEM Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#474747",
+              "primary": "#ffffff",
+              "surface-container": "#201f1f",
+              "on-secondary": "#1a1c1c",
+              "inverse-on-surface": "#313030",
+              "on-surface": "#e5e2e1",
+              "primary-fixed-dim": "#454747",
+              "on-tertiary": "#1b1c1c",
+              "surface": "#131313",
+              "on-secondary-fixed": "#1a1c1c",
+              "background": "#131313",
+              "secondary": "#c6c6c6",
+              "surface-variant": "#353534",
+              "surface-tint": "#c6c6c7",
+              "on-error": "#690005",
+              "secondary-fixed-dim": "#ababab",
+              "surface-container-lowest": "#0e0e0e",
+              "outline-variant": "#474747",
+              "outline": "#919191",
+              "surface-container-highest": "#353534",
+              "on-primary": "#1a1c1c",
+              "secondary-fixed": "#c6c6c6",
+              "on-tertiary-fixed": "#ffffff",
+              "on-primary-container": "#000000",
+              "error-container": "#93000a",
+              "tertiary-fixed": "#5f5e5e",
+              "tertiary": "#e4e2e1",
+              "primary-fixed": "#5d5f5f",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "on-tertiary-container": "#000000",
+              "on-secondary-fixed-variant": "#3a3c3c",
+              "tertiary-container": "#929090",
+              "inverse-primary": "#5d5f5f",
+              "surface-container-low": "#1c1b1b",
+              "surface-bright": "#3a3939",
+              "on-tertiary-fixed-variant": "#e4e2e1",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-high": "#2a2a2a",
+              "on-primary-fixed": "#ffffff",
+              "on-error-container": "#ffdad6",
+              "error": "#ffb4ab",
+              "on-surface-variant": "#c6c6c6",
+              "secondary-container": "#454747",
+              "surface-dim": "#131313",
+              "on-background": "#e5e2e1",
+              "primary-container": "#d4d4d4",
+              "on-secondary-container": "#e2e2e2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #131313;
+        color: #e5e2e1;
+      }
+      .brutal-border {
+        border: 1px solid rgba(71, 71, 71, 0.2);
+      }
+      .glass-card {
+        background: rgba(28, 27, 27, 0.8);
+        backdrop-filter: blur(20px);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313] flex justify-between items-center px-6 h-16 w-full flat no shadows">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white" data-icon="terminal">terminal</span>
+<span class="font-manrope font-bold uppercase tracking-tighter text-xl font-black text-white tracking-widest">AI_PROXY_SYSTEM</span>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="User profile avatar" data-alt="High contrast black and white close-up portrait of a professional individual with sharp lighting and minimalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBVYNcFsV_3bHaDRtLvZm13UMAR6AP6_rJCkB8e5aerkmFeHV7BaeXrNU2nHcXWM0FFzyAB7bpAme48zVKowbMMnLaQ9Gn8hefYO73aeVVtES6ckb0phh-r8SKN-ghig5OvPnvoURVRWOKY7bB0osh4XQySMqIr-ZOs3Sj5U_Ee72ShT3bXZZTO1EdEQHPKiIJOguU3IIxhz-Bbl8vEqIICAiPLwtPBkSuhMtpj7fyEvLHpyRjPHKxI6faAWgbBqp_zavBt5Y6A5C1"/>
+</div>
+</nav>
+<!-- Content Canvas -->
+<main class="pt-24 pb-32 px-6 max-w-lg mx-auto space-y-8">
+<!-- Header Section -->
+<header>
+<p class="font-label text-[10px] text-on-surface-variant uppercase tracking-[0.2em] mb-1">SYSTEM STATUS: NOMINAL</p>
+<h1 class="font-headline text-4xl font-extrabold text-primary tracking-tighter leading-none">OVERVIEW</h1>
+</header>
+<!-- Bento Metrics Grid -->
+<section class="grid grid-cols-2 gap-4">
+<!-- Metric 1: Total Requests -->
+<div class="col-span-2 bg-surface-container-low p-6 brutal-border relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label text-[10px] text-secondary tracking-widest uppercase">Total Requests</span>
+<span class="material-symbols-outlined text-outline" data-icon="data_usage">data_usage</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-5xl font-headline font-black text-primary">1.2M</span>
+<span class="text-xs font-label text-primary/60">+14%</span>
+</div>
+<!-- Mini Trendline (Visual Only) -->
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+</div>
+<!-- Metric 2: PII Reductions -->
+<div class="bg-surface-container-high p-5 brutal-border">
+<span class="font-label text-[10px] text-secondary tracking-widest uppercase block mb-4">PII Reductions</span>
+<span class="text-2xl font-headline font-bold text-primary">42k</span>
+<div class="mt-2 h-1 w-full bg-surface-container-lowest overflow-hidden">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+</div>
+<!-- Metric 3: Active Keys -->
+<div class="bg-surface-container-high p-5 brutal-border">
+<span class="font-label text-[10px] text-secondary tracking-widest uppercase block mb-4">Active Keys</span>
+<span class="text-2xl font-headline font-bold text-primary">156</span>
+<div class="mt-2 flex gap-1">
+<div class="w-2 h-2 rounded-full bg-primary/40"></div>
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<div class="w-2 h-2 rounded-full bg-primary/60"></div>
+</div>
+</div>
+<!-- Metric 4: Rate Limit Events -->
+<div class="col-span-2 bg-surface-container-lowest p-6 brutal-border">
+<div class="flex justify-between items-center mb-6">
+<span class="font-label text-[10px] text-secondary tracking-widest uppercase">Traffic Volume (24H)</span>
+<span class="text-[10px] font-label text-outline uppercase tracking-tighter">Live Feed</span>
+</div>
+<!-- Condensed Bar Chart -->
+<div class="flex items-end justify-between h-16 gap-1">
+<div class="bg-outline-variant/30 w-full h-[40%]"></div>
+<div class="bg-outline-variant/30 w-full h-[60%]"></div>
+<div class="bg-outline-variant/30 w-full h-[35%]"></div>
+<div class="bg-outline-variant/30 w-full h-[80%]"></div>
+<div class="bg-primary w-full h-[95%]"></div>
+<div class="bg-outline-variant/30 w-full h-[70%]"></div>
+<div class="bg-outline-variant/30 w-full h-[55%]"></div>
+<div class="bg-outline-variant/30 w-full h-[45%]"></div>
+<div class="bg-outline-variant/30 w-full h-[90%]"></div>
+<div class="bg-outline-variant/30 w-full h-[65%]"></div>
+<div class="bg-outline-variant/30 w-full h-[30%]"></div>
+<div class="bg-outline-variant/30 w-full h-[20%]"></div>
+</div>
+</div>
+</section>
+<!-- Rate Limit Alert Banner -->
+<section class="bg-surface-bright/10 brutal-border p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="warning">warning</span>
+<div>
+<p class="font-label text-[10px] uppercase font-bold text-primary">Rate Limit Warning</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tight">892 Events detected in cluster_04</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</section>
+<!-- Recent PII Detections List -->
+<section class="space-y-4">
+<h2 class="font-label text-[10px] text-secondary tracking-[0.25em] uppercase border-b border-outline-variant/10 pb-2">Recent PII Detections</h2>
+<div class="space-y-1">
+<!-- Log Item 1 -->
+<div class="bg-surface-container-low p-4 flex justify-between items-center hover:bg-surface-container-high transition-colors">
+<div class="flex gap-4 items-center">
+<span class="font-label text-[10px] text-outline">14:02:11</span>
+<div>
+<p class="font-label text-xs font-bold text-primary uppercase">Credit_Card_Number</p>
+<p class="text-[10px] font-mono text-on-surface-variant">REQ_ID: 982-AX-01</p>
+</div>
+</div>
+<span class="font-label text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-sm">REDACTED</span>
+</div>
+<!-- Log Item 2 -->
+<div class="bg-surface-container-low p-4 flex justify-between items-center hover:bg-surface-container-high transition-colors">
+<div class="flex gap-4 items-center">
+<span class="font-label text-[10px] text-outline">13:58:45</span>
+<div>
+<p class="font-label text-xs font-bold text-primary uppercase">Email_Address</p>
+<p class="text-[10px] font-mono text-on-surface-variant">REQ_ID: 982-AX-04</p>
+</div>
+</div>
+<span class="font-label text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-sm">REDACTED</span>
+</div>
+<!-- Log Item 3 -->
+<div class="bg-surface-container-low p-4 flex justify-between items-center hover:bg-surface-container-high transition-colors">
+<div class="flex gap-4 items-center">
+<span class="font-label text-[10px] text-outline">13:42:01</span>
+<div>
+<p class="font-label text-xs font-bold text-primary uppercase">Phone_Number</p>
+<p class="text-[10px] font-mono text-on-surface-variant">REQ_ID: 982-AX-09</p>
+</div>
+</div>
+<span class="font-label text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-sm">REDACTED</span>
+</div>
+</div>
+<button class="w-full py-4 text-[10px] font-label font-bold uppercase tracking-widest text-secondary hover:text-primary border border-dashed border-outline-variant/40 transition-all active:scale-95 duration-100">
+                View All System Logs
+            </button>
+</section>
+<!-- Technical Metadata Footer -->
+<footer class="pt-8 border-t border-outline-variant/10">
+<div class="flex justify-between items-center opacity-40">
+<span class="text-[9px] font-label uppercase tracking-tighter">Kernel: v4.2.0-stable</span>
+<span class="text-[9px] font-label uppercase tracking-tighter">Region: US-EAST-1</span>
+</div>
+</footer>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-[#131313] border-t border-[#474747]/20 z-50">
+<!-- OVERVIEW (Active) -->
+<a class="flex flex-col items-center justify-center text-white bg-gradient-to-br from-white to-[#d4d4d4] text-[#1a1c1c] rounded-sm px-4 py-1 translate-y-[-2px] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">OVERVIEW</span>
+</a>
+<!-- POLICIES -->
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">POLICIES</span>
+</a>
+<!-- KEYS -->
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="vpn_key">vpn_key</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">KEYS</span>
+</a>
+<!-- LOGS -->
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">LOGS</span>
+</a>
+</nav>
+</body></html>

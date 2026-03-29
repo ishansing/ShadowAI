@@ -23,6 +23,7 @@ export interface RedactionResult {
   redacted: string;
   matches: PiiMatch[];
   riskScore: number; // 0-100
+  shouldBlock: boolean; // True if any match has a 'block' action
 }
 
 // ------------------------------------------------------------------
@@ -56,6 +57,7 @@ export interface PolicyConfig {
   blockSSN: boolean;
   blockApiKeys: boolean;
   blockPhones: boolean;
+  ruleActions?: Record<string, "redact" | "block">;
 }
 
 // Default strict policy
@@ -65,6 +67,7 @@ export const defaultPolicy: PolicyConfig = {
   blockSSN: true,
   blockApiKeys: true,
   blockPhones: true,
+  ruleActions: {},
 };
 
 // ------------------------------------------------------------------
@@ -77,6 +80,7 @@ export function scanAndRedact(
   let redactedText = text;
   const matches: PiiMatch[] = [];
   let riskScore = 0;
+  let shouldBlock = false;
 
   // Map the policy flags to our PII types
   const activeTypes = new Set<string>();
@@ -98,6 +102,12 @@ export function scanAndRedact(
     const found = text.match(regex);
 
     if (found) {
+      // Check if this specific type is set to 'block'
+      const action = policy.ruleActions?.[type] || "redact";
+      if (action === "block") {
+        shouldBlock = true;
+      }
+
       // Calculate risk (arbitrary weights)
       const weight = type === "CREDIT_CARD" || type === "API_KEY" ? 30 : 10;
       riskScore += found.length * weight;
@@ -121,5 +131,6 @@ export function scanAndRedact(
     redacted: redactedText,
     matches,
     riskScore: Math.min(riskScore, 100),
+    shouldBlock,
   };
 }

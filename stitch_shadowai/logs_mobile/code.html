@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI_PROXY_SYSTEM | LOGS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#474747",
+              "primary": "#ffffff",
+              "surface-container": "#201f1f",
+              "on-secondary": "#1a1c1c",
+              "inverse-on-surface": "#313030",
+              "on-surface": "#e5e2e1",
+              "primary-fixed-dim": "#454747",
+              "on-tertiary": "#1b1c1c",
+              "surface": "#131313",
+              "on-secondary-fixed": "#1a1c1c",
+              "background": "#131313",
+              "secondary": "#c6c6c6",
+              "surface-variant": "#353534",
+              "surface-tint": "#c6c6c7",
+              "on-error": "#690005",
+              "secondary-fixed-dim": "#ababab",
+              "surface-container-lowest": "#0e0e0e",
+              "outline-variant": "#474747",
+              "outline": "#919191",
+              "surface-container-highest": "#353534",
+              "on-primary": "#1a1c1c",
+              "secondary-fixed": "#c6c6c6",
+              "on-tertiary-fixed": "#ffffff",
+              "on-primary-container": "#000000",
+              "error-container": "#93000a",
+              "tertiary-fixed": "#5f5e5e",
+              "tertiary": "#e4e2e1",
+              "primary-fixed": "#5d5f5f",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "on-tertiary-container": "#000000",
+              "on-secondary-fixed-variant": "#3a3c3c",
+              "tertiary-container": "#929090",
+              "inverse-primary": "#5d5f5f",
+              "surface-container-low": "#1c1b1b",
+              "surface-bright": "#3a3939",
+              "on-tertiary-fixed-variant": "#e4e2e1",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-high": "#2a2a2a",
+              "on-primary-fixed": "#ffffff",
+              "on-error-container": "#ffdad6",
+              "error": "#ffb4ab",
+              "on-surface-variant": "#c6c6c6",
+              "secondary-container": "#454747",
+              "surface-dim": "#131313",
+              "on-background": "#e5e2e1",
+              "primary-container": "#d4d4d4",
+              "on-secondary-container": "#e2e2e2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .terminal-glow {
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#131313] text-white flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white" data-icon="terminal">terminal</span>
+<h1 class="font-manrope font-bold uppercase tracking-tighter text-xl font-black text-white tracking-widest">AI_PROXY_SYSTEM</h1>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant/20 hover:bg-[#2a2a2a] transition-colors cursor-pointer active:scale-95 duration-100">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a professional developer in a dark studio setting with soft rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtuW-2B3hiuvGbXu0fXVvFCGU0P2rUU3WXtL4xTZ3auazjk5jmrOijZYnVq6_fmp-IyyNwjw_dYYeef4o8CLMbowMsnExfsGCdT_JUPNoexhlF2pQT04nc6A8zmKCJTatVWldjz2RqpgH5RUB7CyI7b16LIsHFDkFALfIVjvIYc7lYoR26vH1NaayEPFR8Gs7zo3D985qugKclEKRGlHELQD0Hig_DnyQYRfgEyBlR3I9hUoxULWw_Cjtrfgcr2NxOd_w6lfqG0fI5"/>
+</div>
+</header>
+<main class="pt-20 pb-24 px-4 min-h-screen">
+<!-- Header Section -->
+<section class="mb-8">
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.2em] text-outline">SYSTEM MONITORING</span>
+<h2 class="font-headline text-4xl font-extrabold tracking-tighter text-primary">AUDIT_LOGS</h2>
+</div>
+<!-- Technical Stats Bar -->
+<div class="mt-6 grid grid-cols-3 gap-2">
+<div class="bg-surface-container-low p-3 flex flex-col gap-1">
+<span class="font-label text-[9px] text-outline uppercase">Uptime</span>
+<span class="font-label text-sm text-primary">99.998%</span>
+</div>
+<div class="bg-surface-container-low p-3 flex flex-col gap-1">
+<span class="font-label text-[9px] text-outline uppercase">Active Keys</span>
+<span class="font-label text-sm text-primary">1,242</span>
+</div>
+<div class="bg-surface-container-low p-3 flex flex-col gap-1">
+<span class="font-label text-[9px] text-outline uppercase">Events/Sec</span>
+<span class="font-label text-sm text-primary">84.2</span>
+</div>
+</div>
+</section>
+<!-- Filters Section -->
+<section class="mb-6 overflow-x-auto hide-scrollbar">
+<div class="flex gap-2 min-w-max pb-2">
+<button class="px-4 py-2 bg-primary text-on-primary font-label text-[11px] font-bold uppercase tracking-widest rounded-lg flex items-center gap-2 transition-all">
+                    ALL
+                </button>
+<button class="px-4 py-2 bg-surface-container-high text-on-surface-variant font-label text-[11px] font-bold uppercase tracking-widest rounded-lg border border-outline-variant/10 hover:bg-surface-bright transition-all">
+                    ERROR
+                </button>
+<button class="px-4 py-2 bg-surface-container-high text-on-surface-variant font-label text-[11px] font-bold uppercase tracking-widest rounded-lg border border-outline-variant/10 hover:bg-surface-bright transition-all">
+                    WARN
+                </button>
+<button class="px-4 py-2 bg-surface-container-high text-on-surface-variant font-label text-[11px] font-bold uppercase tracking-widest rounded-lg border border-outline-variant/10 hover:bg-surface-bright transition-all">
+                    INFO
+                </button>
+<button class="p-2 bg-surface-container-high text-on-surface-variant rounded-lg border border-outline-variant/10">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</section>
+<!-- Terminal Logs List -->
+<section class="space-y-1 bg-surface-container-lowest p-2 terminal-glow border border-outline-variant/5">
+<!-- Log Entry 1: Error -->
+<div class="group bg-surface-container-low/40 p-3 hover:bg-surface-container-high transition-colors active:scale-[0.99] duration-75 cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span>
+<span class="font-label text-[10px] font-bold text-error tracking-widest uppercase">ERROR</span>
+</div>
+<span class="font-label text-[10px] text-outline uppercase">14:22:01.042</span>
+</div>
+<div class="grid grid-cols-12 gap-2">
+<div class="col-span-12">
+<p class="font-label text-xs text-on-surface font-bold leading-relaxed">AUTHENTICATION_FAILURE: INVALID_API_KEY_FORMAT</p>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Actor</span>
+<span class="font-label text-[11px] text-secondary truncate block">USR_9281_X</span>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Endpoint</span>
+<span class="font-label text-[11px] text-secondary truncate block">/v1/completions</span>
+</div>
+</div>
+<!-- Expandable detail (hidden by default in visual, shown for demo of structure) -->
+<div class="mt-4 pt-4 border-t border-outline-variant/10 hidden group-hover:block transition-all">
+<code class="block font-label text-[10px] text-outline leading-tight whitespace-pre bg-black/40 p-2 rounded">
+{
+  "request_id": "req_0x2A1B",
+  "ip_address": "192.168.1.44",
+  "origin": "mobile-app-prod",
+  "status": 401
+}
+                    </code>
+</div>
+</div>
+<!-- Log Entry 2: Info -->
+<div class="group bg-surface-container-low/40 p-3 hover:bg-surface-container-high transition-colors active:scale-[0.99] duration-75 cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary/40 rounded-full"></span>
+<span class="font-label text-[10px] font-bold text-outline tracking-widest uppercase">INFO</span>
+</div>
+<span class="font-label text-[10px] text-outline uppercase">14:21:55.891</span>
+</div>
+<div class="grid grid-cols-12 gap-2">
+<div class="col-span-12">
+<p class="font-label text-xs text-on-surface font-bold leading-relaxed">TOKEN_REFRESH_SUCCESSFUL</p>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Actor</span>
+<span class="font-label text-[11px] text-secondary truncate block">SYS_DAEMON_01</span>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Module</span>
+<span class="font-label text-[11px] text-secondary truncate block">AUTH_ORCHESTRATOR</span>
+</div>
+</div>
+</div>
+<!-- Log Entry 3: Warn -->
+<div class="group bg-surface-container-low/40 p-3 hover:bg-surface-container-high transition-colors active:scale-[0.99] duration-75 cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-tertiary-container rounded-full"></span>
+<span class="font-label text-[10px] font-bold text-tertiary-container tracking-widest uppercase">WARN</span>
+</div>
+<span class="font-label text-[10px] text-outline uppercase">14:21:42.110</span>
+</div>
+<div class="grid grid-cols-12 gap-2">
+<div class="col-span-12">
+<p class="font-label text-xs text-on-surface font-bold leading-relaxed">RATE_LIMIT_NEAR_THRESHOLD: 85% CAPACITY</p>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Actor</span>
+<span class="font-label text-[11px] text-secondary truncate block">KEY_PRO_99</span>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Tier</span>
+<span class="font-label text-[11px] text-secondary truncate block">ENTERPRISE_GOLD</span>
+</div>
+</div>
+</div>
+<!-- Log Entry 4: Error -->
+<div class="group bg-surface-container-low/40 p-3 hover:bg-surface-container-high transition-colors active:scale-[0.99] duration-75 cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span>
+<span class="font-label text-[10px] font-bold text-error tracking-widest uppercase">ERROR</span>
+</div>
+<span class="font-label text-[10px] text-outline uppercase">14:20:11.002</span>
+</div>
+<div class="grid grid-cols-12 gap-2">
+<div class="col-span-12">
+<p class="font-label text-xs text-on-surface font-bold leading-relaxed">UPSTREAM_TIMEOUT: OPENAI_API_503</p>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Actor</span>
+<span class="font-label text-[11px] text-secondary truncate block">GLOBAL_GATEWAY</span>
+</div>
+<div class="col-span-6">
+<span class="font-label text-[9px] text-outline uppercase block">Latency</span>
+<span class="font-label text-[11px] text-secondary truncate block">30,005ms</span>
+</div>
+</div>
+</div>
+<!-- Log Entry 5: Info -->
+<div class="group bg-surface-container-low/40 p-3 hover:bg-surface-container-high transition-colors active:scale-[0.99] duration-75 cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary/40 rounded-full"></span>
+<span class="font-label text-[10px] font-bold text-outline tracking-widest uppercase">INFO</span>
+</div>
+<span class="font-label text-[10px] text-outline uppercase">14:19:48.552</span>
+</div>
+<div class="grid grid-cols-12 gap-2">
+<div class="col-span-12">
+<p class="font-label text-xs text-on-surface font-bold leading-relaxed">POLICY_UPDATE_APPLIED: IP_WHITELIST_RELOADED</p>
+</div>
+<div class="col-span-12">
+<span class="font-label text-[9px] text-outline uppercase block">Commit</span>
+<span class="font-label text-[11px] text-secondary truncate block">8f2a1b9...security_patch_v2</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Loading Indicator -->
+<div class="py-8 flex justify-center items-center gap-3">
+<div class="w-4 h-4 border-2 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+<span class="font-label text-[10px] text-outline tracking-[0.3em] uppercase">Fetching older logs...</span>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-[#131313] border-t border-[#474747]/20 z-50">
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all active:translate-y-[-2px] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">OVERVIEW</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all active:translate-y-[-2px] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">POLICIES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c6c6c6]/70 px-4 py-1 hover:text-white transition-all active:translate-y-[-2px] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="vpn_key">vpn_key</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">KEYS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white bg-gradient-to-br from-white to-[#d4d4d4] text-[#1a1c1c] rounded-sm px-4 py-1 hover:text-white transition-all active:translate-y-[-2px] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">LOGS</span>
+</a>
+</nav>
+<!-- Floating Action Button - Supressed as per Relevance Check for Detail/Audit focus -->
+</body></html>

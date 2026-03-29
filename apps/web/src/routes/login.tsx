@@ -1,9 +1,6 @@
-// apps/web/src/routes/login.tsx
 import { createFileRoute } from '@tanstack/react-router';
 import { authClient } from '../lib/auth';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ShieldCheck, Lock } from 'lucide-react';
 
 export const Route = createFileRoute('/login')({
   component: Login,
@@ -32,81 +29,58 @@ function Login() {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center p-4">
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center gap-4 mb-10"
-      >
-        <div className="w-16 h-16 bg-foreground rounded-2xl flex items-center justify-center shadow-xl shadow-black/40">
-          <ShieldCheck className="w-8 h-8 text-background" />
-        </div>
-        <div className="text-center space-y-1">
-          <h1 className="text-3xl font-black tracking-tighter">Shadow AI Gateway</h1>
-          <p className="text-muted-foreground font-medium">Enterprise Data Plane Control</p>
-        </div>
-      </motion.div>
-
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.1 }}
-        className="w-full max-w-md p-8 bg-card rounded-3xl border border-border shadow-2xl shadow-black/40"
-      >
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-muted-foreground uppercase tracking-widest ml-1">Email</label>
-              <input 
-                type="email" 
-                placeholder="admin@company.com" 
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full bg-secondary/50 border border-border p-4 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none transition-all placeholder:text-muted-foreground/50 font-medium"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between items-end ml-1">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Password</label>
-                <button type="button" className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors">Forgot?</button>
-              </div>
-              <input 
-                type="password" 
-                placeholder="••••••••"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full bg-secondary/50 border border-border p-4 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none transition-all placeholder:text-muted-foreground/50 font-medium"
-                required
-              />
-            </div>
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-4 technical-grid font-body">
+      <div className="w-full max-w-md">
+        
+        <div className="mb-10 text-center flex flex-col items-center">
+          <div className="w-16 h-16 bg-surface-container-lowest border border-white/10 rounded mb-6 flex items-center justify-center">
+             <span className="material-symbols-outlined text-white text-3xl">terminal</span>
           </div>
+          <h1 className="text-3xl font-headline font-black tracking-tighter text-white">MONOLITH_PROXY</h1>
+          <p className="text-sm font-label tracking-widest uppercase text-neutral-500 mt-2">Authentication Required</p>
+        </div>
 
-          <button 
-            type="submit" 
-            disabled={isLoading}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground p-4 rounded-xl font-black text-lg transition-all transform active:scale-[0.98] disabled:bg-muted disabled:text-muted-foreground disabled:active:scale-100 flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
-          >
-            {isLoading ? (
-              <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <>
-                <Lock className="w-5 h-5" />
-                <span>Authenticate</span>
-              </>
-            )}
-          </button>
-        </form>
-      </motion.div>
+        <div className="bg-surface-container-low p-8 border border-white/5 shadow-2xl">
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[0.65rem] font-label font-bold text-neutral-500 uppercase tracking-widest">Operator Email</label>
+                <input 
+                  type="email" 
+                  placeholder="admin@monolith.ai" 
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="w-full bg-surface-container-lowest border border-white/10 p-3 text-sm text-white focus:border-white/40 focus:ring-0 outline-none transition-colors font-mono"
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[0.65rem] font-label font-bold text-neutral-500 uppercase tracking-widest">Access Passphrase</label>
+                <input 
+                  type="password" 
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="w-full bg-surface-container-lowest border border-white/10 p-3 text-sm text-white focus:border-white/40 focus:ring-0 outline-none transition-colors font-mono"
+                  required
+                />
+              </div>
+            </div>
 
-      <motion.p 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="mt-8 text-sm text-muted-foreground font-medium"
-      >
-        Secured by <span className="text-foreground">Better Auth</span> & <span className="text-foreground">Hono</span>
-      </motion.p>
+            <button 
+              type="submit" 
+              disabled={isLoading}
+              className="w-full bg-gradient-to-br from-white to-[#d4d4d4] text-[#1a1c1c] p-3 font-label font-bold text-xs uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 mt-4"
+            >
+              {isLoading ? 'VERIFYING...' : 'INITIATE_SESSION'}
+            </button>
+          </form>
+        </div>
+
+        <div className="mt-8 text-center">
+           <p className="font-mono text-[0.6rem] text-neutral-600 uppercase">CONNECTION_SECURED: AES-256-GCM</p>
+        </div>
+      </div>
     </div>
   );
 }

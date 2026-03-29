@@ -1,142 +1,251 @@
-// apps/web/src/routes/index.tsx
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { authClient } from '../lib/auth';
 import { client } from '../lib/api';
-import { columns } from '../components/columns';
-import { DataTable } from '../components/data-table';
-import { motion } from 'framer-motion';
-import { ShieldAlert, ShieldCheck, Activity, Users } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute('/')({
   beforeLoad: async () => {
     const session = await authClient.getSession();
-    if (!session.data) {
-      throw redirect({ to: '/login' });
-    }
+    if (!session.data) throw redirect({ to: '/login' });
   },
-  component: Dashboard,
+  component: OverviewPage,
 });
 
-function Dashboard() {
-  const { data: session } = authClient.useSession();
-
-  const { data: logs, isLoading, error } = useQuery({
+function OverviewPage() {
+  const { data: logs } = useQuery({
     queryKey: ['audit-logs'],
     queryFn: async () => {
-      const response = await client.api.logs.$get();
-      if (!response.ok) throw new Error('Network response was not ok');
-      return await response.json();
+      const res = await client.api.logs.$get();
+      return res.json();
     },
-    refetchInterval: 5000, // Auto-refresh for "Live" feel
+    refetchInterval: 5000,
   });
 
-  const redactedCount = logs?.filter(l => l.wasRedacted).length || 0;
+  const { data: keys } = useQuery({
+    queryKey: ['api-keys'],
+    queryFn: async () => {
+      const res = await client.api.keys.$get();
+      return res.json();
+    }
+  });
+
+  const exportToCSV = () => {
+    if (!logs || logs.length === 0) return;
+    
+    const headers = ["Timestamp", "UserEmail", "Prompt", "WasRedacted", "RedactedFields", "Provider"];
+    const csvRows = [
+      headers.join(","),
+      ...logs.map(log => [
+        new Date(log.timestamp).toISOString(),
+        log.userEmail,
+        `"${log.prompt.replace(/"/g, '""')}"`,
+        log.wasRedacted,
+        `"${log.redactedFields.join("|")}"`,
+        log.provider
+      ].join(","))
+    ];
+
+    const blob = new Blob([csvRows.join("\n")], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `audit_logs_${new Date().getTime()}.csv`);
+    a.click();
+  };
+
+  const totalLogs = logs?.length || 0;
+  const redactedLogs = logs?.filter(l => l.wasRedacted) || [];
+  const activeKeys = keys?.length || 0;
 
   return (
-    <div className="space-y-10">
-      <header className="flex justify-between items-end">
-        <div className="space-y-1">
-          <h2 className="text-4xl font-extrabold tracking-tight">Live Audit Logs</h2>
-          <p className="text-muted-foreground text-lg">Real-time monitoring of PII redaction and gateway activity.</p>
-        </div>
-        
-        <div className="flex flex-col items-end gap-2">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-xs font-medium uppercase tracking-wider">Gateway Online</span>
-          </div>
-          <button 
-            onClick={async () => {
-              await authClient.signOut();
-              window.location.href = "/login";
-            }}
-            className="text-xs font-semibold text-muted-foreground hover:text-destructive transition-colors"
-          >
-            Sign Out ({session?.user?.email})
-          </button>
-        </div>
+    <main className="p-8 pb-32 max-w-7xl mx-auto space-y-8 w-full">
+      {/* Hero Display Section */}
+      <header className="mb-12">
+        <h1 className="font-headline font-extrabold text-[3.5rem] leading-none tracking-tighter text-white mb-2">SYSTEM_OVERVIEW</h1>
+        <p className="font-label text-on-surface-variant text-sm tracking-widest uppercase">NODE_LOCATION: US-EAST-01 // LATENCY: 14MS</p>
       </header>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StatCard 
-          title="Total Interceptions" 
-          value={logs?.length || 0} 
-          icon={<Activity className="w-4 h-4" />} 
-          delay={0.1}
-        />
-        <StatCard 
-          title="Redactions Triggered" 
-          value={redactedCount} 
-          icon={<ShieldAlert className="w-4 h-4 text-destructive" />} 
-          delay={0.2}
-        />
-        <StatCard 
-          title="Compliance Score" 
-          value="100%" 
-          icon={<ShieldCheck className="w-4 h-4 text-green-500" />} 
-          delay={0.3}
-        />
-        <StatCard 
-          title="Active Admins" 
-          value="1" 
-          icon={<Users className="w-4 h-4" />} 
-          delay={0.4}
-        />
+      {/* High-Level Metrics Bento Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="bg-surface-container-low p-6 border-l-2 border-primary">
+          <div className="font-label text-[0.625rem] text-secondary tracking-widest uppercase mb-4">TOTAL_REQUESTS</div>
+          <div className="mono-data text-3xl font-bold text-white tracking-tight">{totalLogs}</div>
+          <div className="font-label text-[0.625rem] text-primary/60 mt-2">+12.4% FROM PREV_CYCLE</div>
+        </div>
+        <div className="bg-surface-container-low p-6 border-l-2 border-outline-variant">
+          <div className="font-label text-[0.625rem] text-secondary tracking-widest uppercase mb-4">PII_REDACTIONS</div>
+          <div className="mono-data text-3xl font-bold text-white tracking-tight">{redactedLogs.length}</div>
+          <div className="font-label text-[0.625rem] text-error mt-2">HIGH_SENSITIVITY_MATCH</div>
+        </div>
+        <div className="bg-surface-container-low p-6 border-l-2 border-outline-variant">
+          <div className="font-label text-[0.625rem] text-secondary tracking-widest uppercase mb-4">ACTIVE_KEYS</div>
+          <div className="mono-data text-3xl font-bold text-white tracking-tight">{activeKeys}</div>
+          <div className="font-label text-[0.625rem] text-neutral-500 mt-2">UTILIZATION_OPTIMAL</div>
+        </div>
+        <div className="bg-surface-container-low p-6 border-l-2 border-outline-variant">
+          <div className="font-label text-[0.625rem] text-secondary tracking-widest uppercase mb-4">SYSTEM_UPTIME</div>
+          <div className="mono-data text-3xl font-bold text-white tracking-tight">99.99%</div>
+          <div className="font-label text-[0.625rem] text-neutral-500 mt-2">STABLE_RELEASE</div>
+        </div>
       </div>
-      
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.5 }}
-        className="space-y-4"
-      >
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold tracking-tight">Recent Activity</h3>
-          <div className="text-sm text-muted-foreground">Showing latest 50 records</div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Traffic Visualization */}
+        <div className="lg:col-span-2 bg-surface-container-low p-8 border border-outline-variant/10">
+          <div className="flex justify-between items-end mb-8">
+            <div>
+              <h3 className="font-headline font-bold text-xl text-white tracking-tight">TRAFFIC_DYNAMICS</h3>
+              <p className="font-label text-[0.625rem] text-neutral-500 uppercase tracking-widest">REQUEST_VOLUME VS POLICY_VIOLATIONS</p>
+            </div>
+            <div className="flex gap-4 mono-data text-[0.65rem]">
+              <div className="flex items-center gap-2 text-white">
+                <span className="w-2 h-2 bg-white"></span> VOLUME
+              </div>
+              <div className="flex items-center gap-2 text-primary/40">
+                <span className="w-2 h-2 bg-primary/40"></span> VIOLATIONS
+              </div>
+            </div>
+          </div>
+          
+          <div className="h-64 flex items-end gap-1 overflow-hidden">
+            {[40, 60, 45, 70, 85, 55, 90, 40, 60, 45, 70, 85, 55, 100, 65, 80, 30, 45, 90, 20, 55, 75, 40, 60].map((h, i) => (
+              <div 
+                key={i} 
+                className="flex-1 bg-surface-container-high hover:bg-white transition-colors cursor-crosshair group relative" 
+                style={{ height: `${h}%` }}
+              >
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-black text-[10px] px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none font-bold">
+                  {h}%
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between mt-4 font-label text-[0.625rem] text-neutral-600 tracking-widest">
+            <span>00:00</span>
+            <span>06:00</span>
+            <span>12:00</span>
+            <span>18:00</span>
+            <span>23:59</span>
+          </div>
         </div>
 
-        {isLoading ? (
-          <div className="bg-card p-20 rounded-2xl border border-border flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-               <div className="w-10 h-10 border-4 border-muted border-t-foreground rounded-full animate-spin" />
-               <p className="text-muted-foreground font-medium animate-pulse tracking-wide uppercase text-xs">Synchronizing with Postgres...</p>
+        {/* System Status & Threat Level */}
+        <div className="space-y-6">
+          <div className="bg-surface-container-low p-6 border border-outline-variant/10">
+            <h3 className="font-label text-[0.625rem] text-secondary tracking-widest uppercase mb-6">INFRASTRUCTURE_HEALTH</h3>
+            <div className="space-y-6">
+              <HealthItem label="EDGE_PROXY_CORE" version="v4.2.1-stable" percent="99.99%" />
+              <HealthItem label="POSTGRESQL_DB" version="Latency: 2ms" percent="HEALTHY" />
+              <HealthItem label="REDIS_CACHE" version="HIT_RATE: 94%" percent="ACTIVE" />
             </div>
           </div>
-        ) : error ? (
-          <div className="bg-destructive/10 p-12 rounded-2xl border border-destructive/20 flex items-center justify-center">
-            <div className="text-center text-destructive max-w-sm">
-              <ShieldAlert className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p className="font-bold text-lg">Connection Failure</p>
-              <p className="text-sm opacity-80 mt-2">The dashboard was unable to reach the Gateway on port 3000. Ensure the Docker container is healthy.</p>
+
+          <div className="bg-surface-container-highest p-6 relative overflow-hidden group border border-outline-variant/10">
+            <div className="relative z-10">
+              <div className="font-label text-[0.625rem] text-primary tracking-widest uppercase mb-4">THREAT_LEVEL</div>
+              <div className="mono-data text-4xl font-black text-white italic">LOW</div>
+              <p className="text-[0.65rem] text-white/60 mt-4 leading-relaxed uppercase">No critical anomalies detected in the last 24 cycles. System integrity verified.</p>
+            </div>
+            <div className="absolute right-[-20px] bottom-[-20px] opacity-10 group-hover:rotate-12 transition-transform duration-500">
+              <span className="material-symbols-outlined text-9xl">security</span>
             </div>
           </div>
-        ) : (
-          <div className="shadow-2xl shadow-black/20 rounded-2xl overflow-hidden border border-border bg-card">
-            <DataTable columns={columns} data={logs || []} />
-          </div>
-        )}
-      </motion.div>
-    </div>
+        </div>
+      </div>
+
+      {/* Recent PII Detections */}
+      <div className="mt-8 bg-surface-container-low border border-outline-variant/10">
+        <div className="p-6 border-b border-white/5 flex justify-between items-center">
+          <h3 className="font-headline font-bold text-white tracking-tight uppercase">RECENT_PII_DETECTIONS</h3>
+          <button 
+            onClick={exportToCSV}
+            className="text-[0.625rem] font-label uppercase tracking-widest border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors"
+          >
+            EXPORT_LOGS
+          </button>
+        </div>
+        <div className="divide-y divide-white/5">
+          {redactedLogs.slice(0, 3).map((log: any) => (
+            <div key={log.id} className="grid grid-cols-1 md:grid-cols-4 p-6 hover:bg-[#2a2a2a] transition-colors items-center gap-4">
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-neutral-500">
+                  {log.redactedFields.includes('API_KEY') ? 'vpn_key' : log.redactedFields.includes('EMAIL') ? 'mail' : 'lock_open'}
+                </span>
+                <div>
+                  <div className="mono-data text-xs font-bold text-white truncate max-w-[150px] uppercase">{log.redactedFields.join('_')}</div>
+                  <div className="font-label text-[0.6rem] text-neutral-500 uppercase">TYPE: PII_IDENTIFIER</div>
+                </div>
+              </div>
+              <div className="mono-data text-[0.65rem] text-neutral-400">
+                TS: {new Date(log.timestamp).toISOString()}
+              </div>
+              <div>
+                <span className="px-2 py-1 bg-surface-container-highest font-label text-[0.6rem] text-white uppercase tracking-tighter border border-white/5">POLICY: GLOBAL_DLP_V2</span>
+              </div>
+              <div className="text-right">
+                <Dialog>
+                  <DialogTrigger>
+                    <span className="font-label text-[0.65rem] text-white font-bold border-b border-white cursor-pointer uppercase hover:text-primary/80 transition-colors">VIEW_REDACTION</span>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-2xl bg-surface border-white/10 text-white">
+                    <DialogHeader>
+                      <DialogTitle className="font-headline tracking-tight uppercase text-2xl font-black">INTERCEPTION_PAYLOAD</DialogTitle>
+                    </DialogHeader>
+                    <div className="mt-6 p-6 bg-surface-container-lowest border border-white/5 font-mono text-sm leading-relaxed whitespace-pre-wrap break-all text-neutral-300">
+                      {log.prompt}
+                    </div>
+                    <div className="mt-4 flex gap-2">
+                      {log.redactedFields.map((field: string) => (
+                        <span key={field} className="px-2 py-1 bg-error-container/20 text-error text-[10px] font-bold border border-error/20">
+                          {field}
+                        </span>
+                      ))}
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </div>
+          ))}
+          {redactedLogs.length === 0 && (
+            <div className="p-12 text-center text-neutral-600 font-label text-xs tracking-widest">NO_THREATS_DETECTED</div>
+          )}
+        </div>
+      </div>
+
+
+      <footer className="mt-8 bg-surface-container-lowest p-6 border border-white/5">
+        <div className="flex items-center gap-2 mb-4 border-b border-white/10 pb-2">
+          <span className="w-2 h-2 rounded-full bg-white"></span>
+          <span className="font-label text-[0.65rem] text-white uppercase tracking-widest">REALTIME_SYSTEM_STREAMS</span>
+        </div>
+        <div className="space-y-1 font-label text-[0.65rem] text-neutral-500 uppercase leading-relaxed">
+          <div className="flex gap-4"><span className="text-white opacity-40">{new Date().toLocaleTimeString()}</span> [AUTH] Validated bearer token for node-014.</div>
+          <div className="flex gap-4"><span className="text-white opacity-40">{new Date().toLocaleTimeString()}</span> [PROXY] Routing request to gemini-2.5-flash.</div>
+          <div className="flex gap-4"><span className="text-white opacity-40">{new Date().toLocaleTimeString()}</span> [DLP] Pattern Match: Scanning request payload...</div>
+        </div>
+      </footer>
+    </main>
   );
 }
 
-function StatCard({ title, value, icon, delay = 0 }: { title: string; value: string | number; icon: React.ReactNode; delay?: number }) {
+function HealthItem({ label, version, percent }: { label: string, version: string, percent: string }) {
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="p-6 rounded-2xl bg-card border border-border hover:border-foreground/20 transition-colors group"
-    >
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{title}</span>
-        <div className="p-2 rounded-lg bg-secondary group-hover:scale-110 transition-transform">
-          {icon}
-        </div>
+    <div className="flex justify-between items-center">
+      <div>
+        <div className="text-sm font-bold text-white font-headline tracking-tight">{label}</div>
+        <div className="mono-data text-[0.6rem] text-neutral-500 uppercase">{version}</div>
       </div>
-      <div className="text-3xl font-black tracking-tighter">{value}</div>
-    </motion.div>
+      <div className="flex items-center gap-2">
+        <span className="mono-data text-xs text-white">{percent}</span>
+        <div className="w-3 h-3 bg-white"></div>
+      </div>
+    </div>
   );
 }

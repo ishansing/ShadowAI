@@ -171,8 +171,33 @@ app.post("/v1/chat/completions", async (c) => {
     const scanResult = scanAndRedact(lastMessage.content, currentPolicy);
     const wasRedacted = scanResult.matches.length > 0;
 
+    // 1.5 Handle Blocking Policy
+    if (scanResult.shouldBlock) {
+      console.warn(`[POLICY] Request blocked due to prohibited data types: ${scanResult.matches.map(m => m.type).join(', ')}`);
+
+      // Still log the attempt for audit purposes
+      db.insert(auditLogs)
+        .values({
+          userId: user.id,
+          userEmail: user.email,
+          prompt: scanResult.original,
+          wasRedacted: true,
+          redactedFields: scanResult.matches.map((m) => m.type),
+          provider: "gemini",
+        })
+        .execute()
+        .catch((err) => {
+          console.error("[DB ERROR] Failed to save audit log for blocked request:", err);
+        });
+
+      return c.json({ 
+        error: "Policy Violation", 
+        message: "Your request was blocked by the security policy. Please remove sensitive information and try again." 
+      }, 403);
+    }
 
     // 2. THE ACTION: Modify the request if needed
+
     if (wasRedacted) {
       console.log(
         `[AUDIT] Redacting ${scanResult.matches.length} items from user.`,

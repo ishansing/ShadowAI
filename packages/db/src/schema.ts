@@ -38,6 +38,14 @@ export const policies = pgTable("policies", {
   blockSSN: boolean("block_ssn").default(true).notNull(),
   blockApiKeys: boolean("block_api_keys").default(true).notNull(),
   blockPhones: boolean("block_phones").default(false).notNull(),
+  ruleActions: jsonb("rule_actions")
+    .$type<Record<string, "redact" | "block">>()
+    .default({})
+    .notNull(),
+  overrides: jsonb("overrides")
+    .$type<Array<{ role: string; type: string }>>()
+    .default([])
+    .notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 

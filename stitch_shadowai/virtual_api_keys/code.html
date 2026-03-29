@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MONOLITH_PROXY | API Keys</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-variant": "#353534",
+              "on-tertiary-container": "#000000",
+              "on-secondary-fixed": "#1a1c1c",
+              "surface-bright": "#3a3939",
+              "inverse-surface": "#e5e2e1",
+              "surface": "#131313",
+              "on-primary-container": "#000000",
+              "on-error": "#690005",
+              "primary-container": "#d4d4d4",
+              "on-tertiary-fixed": "#ffffff",
+              "secondary-container": "#454747",
+              "secondary": "#c6c6c6",
+              "inverse-primary": "#5d5f5f",
+              "surface-container-highest": "#353534",
+              "primary-fixed": "#5d5f5f",
+              "tertiary": "#e4e2e1",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "on-tertiary-fixed-variant": "#e4e2e1",
+              "tertiary-fixed-dim": "#474747",
+              "secondary-fixed": "#c6c6c6",
+              "on-secondary-fixed-variant": "#3a3c3c",
+              "on-error-container": "#ffdad6",
+              "secondary-fixed-dim": "#ababab",
+              "outline-variant": "#474747",
+              "on-primary": "#1a1c1c",
+              "surface-container": "#201f1f",
+              "on-tertiary": "#1b1c1c",
+              "tertiary-fixed": "#5f5e5e",
+              "surface-container-lowest": "#0e0e0e",
+              "tertiary-container": "#929090",
+              "error-container": "#93000a",
+              "on-secondary-container": "#e2e2e2",
+              "outline": "#919191",
+              "on-surface-variant": "#c6c6c6",
+              "surface-container-high": "#2a2a2a",
+              "surface-container-low": "#1c1b1b",
+              "inverse-on-surface": "#313030",
+              "surface-dim": "#131313",
+              "on-background": "#e5e2e1",
+              "primary": "#ffffff",
+              "on-primary-fixed": "#ffffff",
+              "primary-fixed-dim": "#454747",
+              "on-surface": "#e5e2e1",
+              "on-secondary": "#1a1c1c",
+              "surface-tint": "#c6c6c7",
+              "error": "#ffb4ab",
+              "background": "#131313"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .technical-grid {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<header class="fixed top-0 z-50 flex justify-between items-center w-full px-8 h-16 max-w-none bg-[#131313] dark:bg-[#131313] border-b border-white/10">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black tracking-tighter text-white font-['Manrope']">MONOLITH_PROXY</span>
+<nav class="hidden md:flex gap-6">
+<a class="font-['Manrope'] uppercase tracking-widest text-[0.6875rem] font-bold text-neutral-500 hover:text-white transition-colors" href="#">Metrics</a>
+<a class="font-['Manrope'] uppercase tracking-widest text-[0.6875rem] font-bold text-neutral-500 hover:text-white transition-colors" href="#">Policies</a>
+<a class="font-['Manrope'] uppercase tracking-widest text-[0.6875rem] font-bold text-white border-b-2 border-white pb-1" href="#">Keys</a>
+<a class="font-['Manrope'] uppercase tracking-widest text-[0.6875rem] font-bold text-neutral-500 hover:text-white transition-colors" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-surface-container-lowest border border-white/5 px-3 py-1.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-neutral-500">search</span>
+<input class="bg-transparent border-none p-0 text-[0.6875rem] font-label tracking-widest focus:ring-0 placeholder-neutral-700 w-32" placeholder="SEARCH_KEYS..." type="text"/>
+</div>
+<button class="p-2 text-neutral-400 hover:bg-[#2a2a2a] transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+<button class="p-2 text-neutral-400 hover:bg-[#2a2a2a] transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded bg-surface-container-high border border-white/10 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="High-contrast technical close-up of a futuristic glowing circuit board in monochromatic obsidian and silver tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVoXcKsXeN-A0QWteTJpkv9w6uYVvK2Deib6r8unBE7119QF6irnMNkqf1fOcXAci7bbMQxXl5_F48b9Ukaek0HnI818i7GEoOdXlGIklInmrwI_wnxxBmA2daF69FEoIJJW3AUS6Bv6KN9XAqm0Cus40Ee8e3hyZHX1B7_4D9v0UTEMOG9gEe5QZvqXxWivjmRIgOIx7wmMYhrWxz9p4M4iXlhbfspMkbmgkgSyFpKvpE_yVd5tDwSiWFPBxcut5-6LRtY-ZcUEth"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 bottom-0 w-64 flex flex-col border-r border-white/5 bg-[#131313] dark:bg-[#131313] hidden lg:flex">
+<div class="p-6 border-b border-white/5 bg-[#1c1b1b]">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
+<span class="font-label text-[0.75rem] uppercase tracking-wider text-white">PROXY_NODE_01</span>
+</div>
+<span class="font-label text-[0.6rem] text-neutral-500 tracking-[0.2em]">STATUS: ACTIVE</span>
+</div>
+<nav class="flex-1 py-4 overflow-y-auto">
+<div class="px-4 mb-2">
+<span class="text-[0.6rem] font-label text-neutral-600 tracking-widest uppercase">Navigation</span>
+</div>
+<a class="text-neutral-500 px-4 py-3 flex items-center gap-3 hover:bg-[#1c1b1b] font-label text-[0.75rem] uppercase tracking-wider transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span> Overview
+            </a>
+<a class="text-neutral-500 px-4 py-3 flex items-center gap-3 hover:bg-[#1c1b1b] font-label text-[0.75rem] uppercase tracking-wider transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span> DLP Rules
+            </a>
+<a class="bg-[#2a2a2a] text-white border-l-4 border-white px-4 py-3 flex items-center gap-3 font-label text-[0.75rem] uppercase tracking-wider transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">key</span> API Keys
+            </a>
+<a class="text-neutral-500 px-4 py-3 flex items-center gap-3 hover:bg-[#1c1b1b] font-label text-[0.75rem] uppercase tracking-wider transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">list_alt</span> Audit Logs
+            </a>
+<div class="mt-8 px-6">
+<button class="w-full py-3 bg-primary text-on-primary font-label text-[0.7rem] font-bold tracking-widest transition-all hover:bg-neutral-200 active:scale-95">
+                    GENERATE_KEY
+                </button>
+</div>
+</nav>
+<div class="p-4 border-t border-white/5 space-y-1">
+<a class="text-neutral-500 px-4 py-2 flex items-center gap-3 hover:bg-[#1c1b1b] font-label text-[0.65rem] uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined text-[16px]">description</span> Docs
+            </a>
+<a class="text-neutral-500 px-4 py-2 flex items-center gap-3 hover:bg-[#1c1b1b] font-label text-[0.65rem] uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined text-[16px]">help_outline</span> Support
+            </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="lg:ml-64 pt-16 min-h-screen technical-grid">
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Page Header -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="text-[0.6875rem] font-label text-neutral-500 uppercase tracking-widest">Authentication</span>
+<div class="h-px w-8 bg-neutral-800"></div>
+</div>
+<h1 class="text-5xl font-headline font-extrabold tracking-tighter text-white">VIRTUAL_KEYS</h1>
+<p class="text-sm text-on-surface-variant max-w-md font-body leading-relaxed">
+                        Manage granular access tokens for proxying LLM requests. Use these keys to enforce rate limits and DLP policies at the edge.
+                    </p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 border border-outline-variant/30 text-primary font-label text-[0.7rem] font-bold tracking-widest hover:bg-surface-container-high transition-all">
+                        EXPORT_METRICS
+                    </button>
+<button class="px-8 py-3 bg-primary text-on-primary font-label text-[0.7rem] font-bold tracking-widest hover:bg-neutral-200 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> GENERATE NEW KEY
+                    </button>
+</div>
+</section>
+<!-- Usage Overview Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 flex flex-col justify-between h-40 group hover:bg-[#201f1f] transition-colors">
+<span class="text-[0.6rem] font-label text-neutral-500 tracking-[0.3em] uppercase">Total Active Keys</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-headline font-black">24</span>
+<span class="text-[0.6rem] font-label text-white/40 tracking-widest">/ 50 LIMIT</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1">
+<div class="bg-primary h-full w-[48%] shadow-[0_0_8px_rgba(255,255,255,0.4)]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 flex flex-col justify-between h-40 group hover:bg-[#201f1f] transition-colors">
+<span class="text-[0.6rem] font-label text-neutral-500 tracking-[0.3em] uppercase">Request Volume (24h)</span>
+<span class="text-4xl font-headline font-black">1.2M</span>
+<div class="flex gap-1 items-end h-8">
+<div class="w-2 bg-neutral-800 h-2 group-hover:h-3 transition-all"></div>
+<div class="w-2 bg-neutral-800 h-4 group-hover:h-6 transition-all"></div>
+<div class="w-2 bg-neutral-700 h-3 group-hover:h-4 transition-all"></div>
+<div class="w-2 bg-neutral-600 h-6 group-hover:h-8 transition-all"></div>
+<div class="w-2 bg-primary h-8 shadow-[0_0_8px_rgba(255,255,255,0.2)]"></div>
+<div class="w-2 bg-neutral-600 h-5 group-hover:h-7 transition-all"></div>
+<div class="w-2 bg-neutral-800 h-3 group-hover:h-5 transition-all"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 flex flex-col justify-between h-40 group hover:bg-[#201f1f] transition-colors">
+<span class="text-[0.6rem] font-label text-neutral-500 tracking-[0.3em] uppercase">DLP Interceptions</span>
+<span class="text-4xl font-headline font-black">142</span>
+<span class="text-[0.6rem] font-label text-error tracking-widest uppercase">+12% VS PREV_PERIOD</span>
+</div>
+</div>
+<!-- Keys Table Section -->
+<div class="bg-surface-container-low overflow-hidden">
+<div class="px-6 py-4 border-b border-white/5 flex justify-between items-center bg-[#201f1f]">
+<span class="text-[0.65rem] font-label tracking-widest uppercase font-bold">Key Repository</span>
+<div class="flex items-center gap-4">
+<span class="text-[0.6rem] font-label text-neutral-500">FILTER BY: ALL_ROLES</span>
+<span class="material-symbols-outlined text-neutral-600 text-[18px]">filter_list</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[0.65rem] font-label text-neutral-500 uppercase tracking-widest border-b border-white/5 bg-surface-container-lowest">
+<th class="px-6 py-4 font-medium">Name / ID</th>
+<th class="px-6 py-4 font-medium">Secret Key</th>
+<th class="px-6 py-4 font-medium">Scope</th>
+<th class="px-6 py-4 font-medium">Usage</th>
+<th class="px-6 py-4 font-medium">Last Activity</th>
+<th class="px-6 py-4 font-medium text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-[0.75rem] font-body">
+<!-- Key Row 1 -->
+<tr class="border-b border-white/5 hover:bg-surface-container transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-white uppercase tracking-tight">PROD_FRONTEND_01</span>
+<span class="text-[0.6rem] font-label text-neutral-600 uppercase">Created: 2023-11-12</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 font-mono text-[0.7rem] bg-surface-container-lowest px-2 py-1 border border-white/5 w-fit">
+<span class="text-neutral-300">sk-shadow-</span>
+<span class="text-neutral-700 tracking-tighter">•••••••••••••58A2</span>
+<button class="material-symbols-outlined text-[14px] text-neutral-600 hover:text-white transition-colors ml-2">content_copy</button>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 bg-neutral-800 text-neutral-400 text-[0.6rem] font-label uppercase">Inference</span>
+<span class="px-1.5 py-0.5 bg-neutral-800 text-neutral-400 text-[0.6rem] font-label uppercase">Metrics</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-white font-label">482,102</span>
+<span class="text-[0.6rem] text-neutral-600 uppercase">Requests</span>
+</div>
+</td>
+<td class="px-6 py-5 font-label text-neutral-400">
+                                    2M AGO
+                                </td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="material-symbols-outlined text-[18px] text-neutral-500 hover:text-white" title="Rotate Key">sync</button>
+<button class="material-symbols-outlined text-[18px] text-neutral-500 hover:text-error" title="Revoke Access">cancel</button>
+</div>
+</td>
+</tr>
+<!-- Key Row 2 -->
+<tr class="border-b border-white/5 hover:bg-surface-container transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-white uppercase tracking-tight">CI_PIPELINE_STAGING</span>
+<span class="text-[0.6rem] font-label text-neutral-600 uppercase">Created: 2023-12-05</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 font-mono text-[0.7rem] bg-surface-container-lowest px-2 py-1 border border-white/5 w-fit">
+<span class="text-neutral-300">sk-shadow-</span>
+<span class="text-neutral-700 tracking-tighter">•••••••••••••11C4</span>
+<button class="material-symbols-outlined text-[14px] text-neutral-600 hover:text-white transition-colors ml-2">content_copy</button>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 bg-neutral-800 text-neutral-400 text-[0.6rem] font-label uppercase">Training</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-white font-label">12,550</span>
+<span class="text-[0.6rem] text-neutral-600 uppercase">Requests</span>
+</div>
+</td>
+<td class="px-6 py-5 font-label text-neutral-400">
+                                    14H AGO
+                                </td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="material-symbols-outlined text-[18px] text-neutral-500 hover:text-white" title="Rotate Key">sync</button>
+<button class="material-symbols-outlined text-[18px] text-neutral-500 hover:text-error" title="Revoke Access">cancel</button>
+</div>
+</td>
+</tr>
+<!-- Key Row 3 -->
+<tr class="border-b border-white/5 hover:bg-surface-container transition-colors group bg-[#1a1a1a]/40">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-neutral-500 uppercase tracking-tight line-through">DEV_SANDBOX_OLD</span>
+<span class="text-[0.6rem] font-label text-error uppercase">REVOKED_STATUS</span>
+</div>
+</td>
+<td class="px-6 py-5 opacity-40">
+<div class="flex items-center gap-2 font-mono text-[0.7rem] bg-surface-container-lowest px-2 py-1 border border-white/5 w-fit">
+<span class="text-neutral-500">sk-shadow-</span>
+<span class="text-neutral-700 tracking-tighter">•••••••••••••99XX</span>
+</div>
+</td>
+<td class="px-6 py-5 opacity-40">
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 bg-neutral-800 text-neutral-500 text-[0.6rem] font-label uppercase">Debug</span>
+</div>
+</td>
+<td class="px-6 py-5 opacity-40">
+<div class="flex flex-col">
+<span class="text-neutral-500 font-label">0</span>
+<span class="text-[0.6rem] text-neutral-700 uppercase">Requests</span>
+</div>
+</td>
+<td class="px-6 py-5 font-label text-neutral-600">
+                                    24D AGO
+                                </td>
+<td class="px-6 py-5 text-right">
+<button class="px-3 py-1 text-[0.6rem] font-label border border-neutral-700 text-neutral-600 hover:border-neutral-500 hover:text-neutral-400 transition-all uppercase">Reactivate</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Detailed Analysis Panel (Contextual) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-headline font-bold uppercase tracking-tight">TRAFFIC_INSPECTION_01</h3>
+<span class="text-[0.65rem] font-label text-primary px-2 py-1 bg-surface-container-high border border-white/5">PROD_FRONTEND_01</span>
+</div>
+<div class="aspect-[16/7] bg-surface-container-lowest border border-white/5 relative flex items-end px-4 py-8 overflow-hidden">
+<!-- Simulated Chart Grid -->
+<div class="absolute inset-0 grid grid-cols-6 border-x border-white/5 pointer-events-none">
+<div class="border-r border-white/5"></div>
+<div class="border-r border-white/5"></div>
+<div class="border-r border-white/5"></div>
+<div class="border-r border-white/5"></div>
+<div class="border-r border-white/5"></div>
+</div>
+<div class="absolute inset-0 grid grid-rows-4 border-y border-white/5 pointer-events-none">
+<div class="border-b border-white/5"></div>
+<div class="border-b border-white/5"></div>
+<div class="border-b border-white/5"></div>
+</div>
+<!-- Bar chart simulation -->
+<div class="relative z-10 flex items-end justify-between w-full h-full gap-2">
+<div class="flex-1 bg-neutral-800 h-[20%]"></div>
+<div class="flex-1 bg-neutral-800 h-[35%]"></div>
+<div class="flex-1 bg-neutral-700 h-[55%]"></div>
+<div class="flex-1 bg-neutral-800 h-[45%]"></div>
+<div class="flex-1 bg-neutral-700 h-[70%]"></div>
+<div class="flex-1 bg-neutral-600 h-[65%]"></div>
+<div class="flex-1 bg-neutral-500 h-[85%]"></div>
+<div class="flex-1 bg-primary h-[100%]"></div>
+<div class="flex-1 bg-neutral-600 h-[75%]"></div>
+<div class="flex-1 bg-neutral-700 h-[60%]"></div>
+<div class="flex-1 bg-neutral-800 h-[40%]"></div>
+<div class="flex-1 bg-neutral-800 h-[30%]"></div>
+</div>
+<div class="absolute top-2 right-2 flex gap-2">
+<span class="text-[0.55rem] font-label text-neutral-500">PEAK: 1,440 Req/s</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-high p-4 border border-white/5">
+<span class="block text-[0.6rem] font-label text-neutral-500 uppercase mb-1">Success Rate</span>
+<span class="text-2xl font-headline font-bold text-white">99.98%</span>
+</div>
+<div class="bg-surface-container-high p-4 border border-white/5">
+<span class="block text-[0.6rem] font-label text-neutral-500 uppercase mb-1">Avg Latency</span>
+<span class="text-2xl font-headline font-bold text-white">124ms</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low border border-white/5 p-8 space-y-8">
+<h3 class="text-xl font-headline font-bold uppercase tracking-tight">SECURITY_POLICIES</h3>
+<div class="space-y-6">
+<div class="flex justify-between items-start pb-4 border-b border-white/5">
+<div>
+<h4 class="font-label text-xs font-bold uppercase tracking-widest text-white">RATE_LIMITING</h4>
+<p class="text-xs text-neutral-500 font-body mt-1">Global throttle per key session.</p>
+</div>
+<div class="px-3 py-1 bg-primary text-on-primary font-label text-[0.65rem] font-bold">10k / MIN</div>
+</div>
+<div class="flex justify-between items-start pb-4 border-b border-white/5">
+<div>
+<h4 class="font-label text-xs font-bold uppercase tracking-widest text-white">DLP_SCANNING</h4>
+<p class="text-xs text-neutral-500 font-body mt-1">Strip PII from outgoing prompts.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[0.65rem] font-label text-white uppercase">Active</span>
+<div class="w-10 h-5 bg-neutral-800 border border-white/10 rounded-full relative flex items-center px-1">
+<div class="w-3 h-3 bg-primary rounded-full translate-x-5"></div>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-label text-xs font-bold uppercase tracking-widest text-white">IP_WHITELIST</h4>
+<p class="text-xs text-neutral-500 font-body mt-1">Restrict access to specific CIDR blocks.</p>
+</div>
+<span class="material-symbols-outlined text-neutral-600 hover:text-white cursor-pointer">edit</span>
+</div>
+<div class="bg-surface-container-lowest p-4 font-mono text-[0.65rem] text-neutral-400 space-y-1">
+<div>192.168.1.0/24</div>
+<div>10.0.0.45/32</div>
+<div class="text-neutral-700">+ Add Range...</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Terminal Status -->
+<footer class="lg:ml-64 border-t border-white/10 p-6 bg-[#0e0e0e] flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 text-[0.65rem] font-label tracking-widest uppercase">
+<span class="text-neutral-500">LIVE_LOGS</span>
+<span class="text-primary/60">[SYSTEM_READY]</span>
+</div>
+<div class="font-mono text-[0.65rem] text-neutral-600">
+<span class="text-neutral-400">14:02:11</span> INFO: Routing request sk-shadow-••••58A2 -&gt; OpenAI_Edge_Gateway_01
+            </div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="text-[0.55rem] font-label text-neutral-500 uppercase tracking-widest">Global Ingest</span>
+<span class="text-xs font-label text-white">1.44 GB/S</span>
+</div>
+<div class="h-8 w-px bg-white/10"></div>
+<div class="flex flex-col items-end">
+<span class="text-[0.55rem] font-label text-neutral-500 uppercase tracking-widest">Active Threads</span>
+<span class="text-xs font-label text-white">12,842</span>
+</div>
+</div>
+</footer>
+</body></html>
