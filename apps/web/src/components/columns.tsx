@@ -36,7 +36,7 @@ const PromptCell = ({ prompt }: { prompt: string }) => {
         <DialogHeader>
           <DialogTitle>Intercepted Prompt</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 font-mono text-sm whitespace-pre-wrap break-words leading-relaxed text-gray-800">
+        <div className="mt-4 p-4 bg-secondary/50 rounded-lg border border-border font-mono text-sm whitespace-pre-wrap break-words leading-relaxed text-foreground">
           {prompt}
         </div>
       </DialogContent>

@@ -30,14 +30,14 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md border bg-white overflow-hidden shadow-sm">
+    <div className="rounded-md border bg-card overflow-hidden shadow-sm">
       <Table>
-        <TableHeader className="bg-gray-50/50">
+        <TableHeader className="bg-muted/50">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="font-semibold text-gray-700">
+                  <TableHead key={header.id} className="font-semibold text-foreground">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center text-gray-500">
+              <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
                 No logs found.
               </TableCell>
             </TableRow>

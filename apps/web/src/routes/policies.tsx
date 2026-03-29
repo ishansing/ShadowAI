@@ -5,6 +5,7 @@ import { client } from '../lib/api';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShieldCheck, Mail, CreditCard, Fingerprint, Key, Phone } from 'lucide-react';
 
 export const Route = createFileRoute('/policies')({
   component: PoliciesPage,
@@ -33,95 +34,105 @@ function PoliciesPage() {
     }
   });
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading policies...</div>;
+  if (isLoading) return <div className="p-20 text-center text-muted-foreground">Loading security profile...</div>;
 
   const handleToggle = (field: string, checked: boolean) => {
     updatePolicy.mutate({ [field]: checked });
   };
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900">DLP Policies</h2>
-        <p className="text-gray-500 mt-1">Configure what sensitive data gets redacted before reaching AI providers.</p>
-      </div>
+    <div className="space-y-10 max-w-4xl mx-auto">
+      <header className="space-y-1">
+        <h2 className="text-4xl font-extrabold tracking-tight text-foreground">DLP Policies</h2>
+        <p className="text-muted-foreground text-lg">Define granular rules for data interception and redaction across the organization.</p>
+      </header>
 
-      <Card className="shadow-sm border-gray-200">
-        <CardHeader>
-          <CardTitle>Data Types</CardTitle>
-          <CardDescription>
-            Toggle which data types should be blocked in real-time.
+      <Card className="rounded-3xl border-border shadow-2xl shadow-black/20 bg-card overflow-hidden">
+        <CardHeader className="bg-secondary/30 border-b border-border p-8">
+          <div className="flex items-center gap-3 mb-2">
+            <ShieldCheck className="w-6 h-6 text-foreground" />
+            <CardTitle className="text-2xl font-black tracking-tight">Active Protection Rules</CardTitle>
+          </div>
+          <CardDescription className="text-base font-medium">
+            Toggle which sensitive data patterns the gateway should proactively redact.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
-          
-          <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
-            <div className="space-y-0.5">
-              <Label className="text-base font-semibold cursor-pointer" htmlFor="block-emails">Email Addresses</Label>
-              <p className="text-sm text-gray-500">Block addresses like john@company.com</p>
-            </div>
-            <Switch 
-              id="block-emails"
-              checked={policy?.blockEmails} 
-              onCheckedChange={(c) => handleToggle('blockEmails', c)} 
-              disabled={updatePolicy.isPending}
+        <CardContent className="p-0">
+          <div className="divide-y divide-border">
+            <PolicyItem 
+              icon={<Mail className="w-5 h-5" />}
+              label="Email Addresses"
+              description="Identify and mask SMTP-valid email formats."
+              checked={policy?.blockEmails}
+              onCheckedChange={(c: boolean) => handleToggle('blockEmails', c)}
+              loading={updatePolicy.isPending}
+            />
+            <PolicyItem 
+              icon={<Key className="w-5 h-5" />}
+              label="API Keys & Secrets"
+              description="Detect cloud provider keys (AWS, Stripe, GitHub)."
+              checked={policy?.blockApiKeys}
+              onCheckedChange={(c: boolean) => handleToggle('blockApiKeys', c)}
+              loading={updatePolicy.isPending}
+            />
+            <PolicyItem 
+              icon={<CreditCard className="w-5 h-5" />}
+              label="Financial Information"
+              description="Redact 16-digit payment card numbers (PANs)."
+              checked={policy?.blockCreditCards}
+              onCheckedChange={(c: boolean) => handleToggle('blockCreditCards', c)}
+              loading={updatePolicy.isPending}
+            />
+            <PolicyItem 
+              icon={<Fingerprint className="w-5 h-5" />}
+              label="Identities (SSN)"
+              description="Mask US Social Security Numbers and government IDs."
+              checked={policy?.blockSSN}
+              onCheckedChange={(c: boolean) => handleToggle('blockSSN', c)}
+              loading={updatePolicy.isPending}
+            />
+            <PolicyItem 
+              icon={<Phone className="w-5 h-5" />}
+              label="Phone Numbers"
+              description="Filter international and local telephone patterns."
+              checked={policy?.blockPhones}
+              onCheckedChange={(c: boolean) => handleToggle('blockPhones', c)}
+              loading={updatePolicy.isPending}
             />
           </div>
-
-          <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
-            <div className="space-y-0.5">
-              <Label className="text-base font-semibold cursor-pointer" htmlFor="block-api-keys">API Keys & Secrets</Label>
-              <p className="text-sm text-gray-500">Block AWS, Stripe, GitHub, and OpenAI keys</p>
-            </div>
-            <Switch 
-              id="block-api-keys"
-              checked={policy?.blockApiKeys} 
-              onCheckedChange={(c) => handleToggle('blockApiKeys', c)} 
-              disabled={updatePolicy.isPending}
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
-            <div className="space-y-0.5">
-              <Label className="text-base font-semibold cursor-pointer" htmlFor="block-credit-cards">Credit Card Numbers</Label>
-              <p className="text-sm text-gray-500">Block 16-digit PANs and similar patterns</p>
-            </div>
-            <Switch 
-              id="block-credit-cards"
-              checked={policy?.blockCreditCards} 
-              onCheckedChange={(c) => handleToggle('blockCreditCards', c)} 
-              disabled={updatePolicy.isPending}
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
-            <div className="space-y-0.5">
-              <Label className="text-base font-semibold cursor-pointer" htmlFor="block-ssn">Social Security Numbers</Label>
-              <p className="text-sm text-gray-500">Block standard US SSN formats (XXX-XX-XXXX)</p>
-            </div>
-            <Switch 
-              id="block-ssn"
-              checked={policy?.blockSSN} 
-              onCheckedChange={(c) => handleToggle('blockSSN', c)} 
-              disabled={updatePolicy.isPending}
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
-            <div className="space-y-0.5">
-              <Label className="text-base font-semibold cursor-pointer" htmlFor="block-phones">Phone Numbers</Label>
-              <p className="text-sm text-gray-500">Block standard phone number formats</p>
-            </div>
-            <Switch 
-              id="block-phones"
-              checked={policy?.blockPhones} 
-              onCheckedChange={(c) => handleToggle('blockPhones', c)} 
-              disabled={updatePolicy.isPending}
-            />
-          </div>
-
         </CardContent>
       </Card>
+      
+      <div className="p-6 bg-secondary/20 rounded-2xl border border-border flex items-center gap-4">
+        <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center">
+          <ShieldCheck className="w-5 h-5 text-muted-foreground" />
+        </div>
+        <p className="text-sm text-muted-foreground font-medium italic">
+          Changes are applied globally to all Virtual API Keys within 500ms of selection.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function PolicyItem({ icon, label, description, checked, onCheckedChange, loading }: any) {
+  return (
+    <div className="flex items-center justify-between p-8 hover:bg-secondary/20 transition-colors group">
+      <div className="flex items-start gap-6">
+        <div className="mt-1 p-3 rounded-2xl bg-secondary group-hover:bg-background transition-colors border border-transparent group-hover:border-border group-hover:scale-110 group-hover:rotate-3 duration-200">
+          {icon}
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xl font-bold tracking-tight cursor-pointer leading-none">{label}</Label>
+          <p className="text-muted-foreground font-medium">{description}</p>
+        </div>
+      </div>
+      <Switch 
+        checked={checked} 
+        onCheckedChange={onCheckedChange} 
+        disabled={loading}
+        className="data-[state=checked]:bg-foreground scale-125"
+      />
     </div>
   );
 }
