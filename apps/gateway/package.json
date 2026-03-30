@@ -7,7 +7,7 @@
     "dev": "bun run --watch src/index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "^1.3.11",
     "@types/node": "^25.5.0"
   },
   "peerDependencies": {

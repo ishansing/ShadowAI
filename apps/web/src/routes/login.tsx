@@ -36,7 +36,7 @@ function Login() {
           <div className="w-16 h-16 bg-surface-container-lowest border border-white/10 rounded mb-6 flex items-center justify-center">
              <span className="material-symbols-outlined text-white text-3xl">terminal</span>
           </div>
-          <h1 className="text-3xl font-headline font-black tracking-tighter text-white">MONOLITH_PROXY</h1>
+          <h1 className="text-3xl font-headline font-black tracking-tighter text-white">SHADOW_AI</h1>
           <p className="text-sm font-label tracking-widest uppercase text-neutral-500 mt-2">Authentication Required</p>
         </div>
 
@@ -47,7 +47,7 @@ function Login() {
                 <label className="text-[0.65rem] font-label font-bold text-neutral-500 uppercase tracking-widest">Operator Email</label>
                 <input 
                   type="email" 
-                  placeholder="admin@monolith.ai" 
+                  placeholder="admin@shadowai.io" 
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="w-full bg-surface-container-lowest border border-white/10 p-3 text-sm text-white focus:border-white/40 focus:ring-0 outline-none transition-colors font-mono"

@@ -58,7 +58,7 @@ function ApiKeysPage() {
   }, [keys, searchQuery]);
 
   const exportMetrics = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ keys, logs_summary: logs?.length }, null, 2));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ keys, logs_summary: (logs as any)?.pagination?.total || 0 }, null, 2));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", "shadow_api_keys_metrics.json");

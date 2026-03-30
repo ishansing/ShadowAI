@@ -16,7 +16,7 @@ const RULES = [
     desc: 'Detection of RFC 5322 compliant email strings across all prompt fields.',
     icon: 'alternate_email',
     regex: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
-    sampleInput: 'contact@monolith.ai',
+    sampleInput: 'contact@shadowai.io',
     sampleOutput: '[REDACTED_EMAIL]',
     category: 'PII'
   },

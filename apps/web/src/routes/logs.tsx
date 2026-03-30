@@ -4,13 +4,6 @@ import { authClient } from '../lib/auth';
 import { client } from '../lib/api';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 export const Route = createFileRoute('/logs')({
   beforeLoad: async () => {

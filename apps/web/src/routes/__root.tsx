@@ -48,7 +48,7 @@ function RootLayout() {
       <header className="fixed top-0 w-full z-50 bg-[#131313] flex justify-between items-center px-8 h-16 border-b border-white/10">
         <div className="flex items-center gap-3">
           <span className="material-symbols-outlined text-white">terminal</span>
-          <span className="font-headline font-bold uppercase tracking-widest text-xl text-white">MONOLITH_PROXY</span>
+          <span className="font-headline font-bold uppercase tracking-widest text-xl text-white">SHADOW_AI</span>
         </div>
         
         <div className="flex items-center gap-4">
@@ -74,7 +74,7 @@ function RootLayout() {
         <div className="p-6 border-b border-white/5 bg-[#1c1b1b]">
           <div className="flex items-center gap-3 mb-1">
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
-            <span className="font-label text-[0.75rem] uppercase tracking-wider text-white">PROXY_NODE_01</span>
+            <span className="font-label text-[0.75rem] uppercase tracking-wider text-white">SHADOW_NODE_01</span>
           </div>
           <span className="font-label text-[0.6rem] text-neutral-500 tracking-[0.2em]">STATUS: ACTIVE</span>
         </div>

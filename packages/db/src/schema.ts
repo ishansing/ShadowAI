@@ -57,6 +57,10 @@ export const gatewaySettings = pgTable("gateway_settings", {
   userId: text("user_id").notNull().unique(),
   defaultProvider: text("default_provider").default("gemini").notNull(),
   fallbackProvider: text("fallback_provider").default("openai").notNull(),
+  providerConfigs: jsonb("provider_configs")
+    .$type<Record<string, { model: string; apiKey: string }>>()
+    .default({})
+    .notNull(),
   routingRules: jsonb("routing_rules").$type<Record<string, string>>().default({}).notNull(), // e.g. {"gpt-4": "openai", "claude": "anthropic"}
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

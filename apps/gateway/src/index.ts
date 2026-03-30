@@ -2,9 +2,9 @@ import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { streamText } from "ai";
-import { google } from "@ai-sdk/google";
-import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
+import { createAnthropic } from "@ai-sdk/anthropic";
 import { desc, eq, and, sql, gte, lte } from "drizzle-orm";
 import crypto from "crypto";
 
@@ -12,6 +12,7 @@ import { scanAndRedact, defaultPolicy } from "@shadow/core";
 import { db, auditLogs, apiKeys, policies, gatewaySettings } from "@shadow/db";
 import { auth, type AuthUser, type AuthSession } from "@shadow/auth";
 import { rateLimitMiddleware } from "./middleware/ratelimit";
+import { encrypt, decrypt } from "./lib/crypto";
 
 type Variables = {
   user: AuthUser;
@@ -21,20 +22,16 @@ type Variables = {
 const app = new Hono<{ Variables: Variables }>();
 
 // ─── DATA RETENTION CRON JOB ─────────────────────────────────────────────
-// Runs every day at midnight to delete logs older than 90 days
-// @ts-ignore - Bun.cron is available in Bun runtime
-if (typeof Bun !== "undefined" && Bun.cron) {
-  Bun.cron({
+// @ts-ignore
+if (typeof (globalThis as any).Bun !== "undefined" && (globalThis as any).Bun.cron) {
+  (globalThis as any).Bun.cron({
     name: "data-retention",
     cron: "0 0 * * *",
     async run() {
-      console.log("[CRON] Running data retention job...");
       const ninetyDaysAgo = new Date();
       ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-      
       try {
         await db.delete(auditLogs).where(lte(auditLogs.timestamp, ninetyDaysAgo));
-        console.log(`[CRON] Retention job complete.`);
       } catch (err) {
         console.error("[CRON] Retention job failed:", err);
       }
@@ -49,23 +46,44 @@ app.use("*", cors({
   credentials: true 
 }));
 
-// Helper to resolve provider
+// Helper to resolve provider with DB-stored keys
 const resolveProvider = (modelName: string, settings: any) => {
+  const configs = settings.providerConfigs || {};
   const rules = settings.routingRules || {};
-  for (const [pattern, provider] of Object.entries(rules)) {
+  
+  let providerType = settings.defaultProvider || "gemini";
+
+  // 1. Check routing rules
+  for (const [pattern, targetProvider] of Object.entries(rules)) {
     if (modelName.toLowerCase().includes(pattern.toLowerCase())) {
-      if (provider === "openai") return openai(modelName);
-      if (provider === "anthropic") return anthropic(modelName);
-      if (provider === "gemini") return google(modelName);
+      providerType = targetProvider as string;
+      break;
     }
   }
-  if (modelName.startsWith("gpt-") || modelName.startsWith("o1-")) return openai(modelName);
-  if (modelName.startsWith("claude-")) return anthropic(modelName);
-  if (modelName.includes("gemini")) return google(modelName);
-  const def = settings.defaultProvider || "gemini";
-  if (def === "openai") return openai(modelName);
-  if (def === "anthropic") return anthropic(modelName);
-  return google(modelName);
+
+  // 2. Heuristics fallback
+  if (modelName.startsWith("gpt-") || modelName.startsWith("o1-")) providerType = "openai";
+  if (modelName.startsWith("claude-")) providerType = "anthropic";
+  if (modelName.includes("gemini")) providerType = "gemini";
+
+  const config = configs[providerType];
+  const apiKey = config?.apiKey ? decrypt(config.apiKey) : undefined;
+  const actualModel = config?.model || modelName;
+
+  // If no API key in DB, fallback to environment variables for backward compatibility
+  const finalApiKey = apiKey || (
+    providerType === "gemini" ? process.env.GOOGLE_GENERATIVE_AI_API_KEY :
+    providerType === "openai" ? process.env.OPENAI_API_KEY :
+    providerType === "anthropic" ? process.env.ANTHROPIC_API_KEY : undefined
+  );
+
+  if (providerType === "openai") {
+    return createOpenAI({ apiKey: finalApiKey })(actualModel);
+  }
+  if (providerType === "anthropic") {
+    return createAnthropic({ apiKey: finalApiKey })(actualModel);
+  }
+  return createGoogleGenerativeAI({ apiKey: finalApiKey })(actualModel);
 };
 
 // 1. Mount Better Auth Handler
@@ -140,7 +158,6 @@ const routes = app
   .get("/api/stats/usage", async (c) => {
     const fourteenDaysAgo = new Date();
     fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
-
     const stats = await db
       .select({
         date: sql<string>`DATE(${auditLogs.timestamp})`,
@@ -152,7 +169,6 @@ const routes = app
       .where(gte(auditLogs.timestamp, fourteenDaysAgo))
       .groupBy(sql`DATE(${auditLogs.timestamp})`)
       .orderBy(sql`DATE(${auditLogs.timestamp})`);
-
     return c.json(stats);
   })
   .get("/api/keys", async (c) => {
@@ -189,12 +205,42 @@ const routes = app
     const user = c.get("user");
     let [settings] = await db.select().from(gatewaySettings).where(eq(gatewaySettings.userId, user.id));
     if (!settings) [settings] = await db.insert(gatewaySettings).values({ userId: user.id }).returning();
-    return c.json(settings);
+    
+    // Mask API keys for security before sending to frontend
+    const maskedConfigs = { ...settings.providerConfigs };
+    for (const key in maskedConfigs) {
+      if (maskedConfigs[key].apiKey) {
+        maskedConfigs[key].apiKey = "••••••••••••••••";
+      }
+    }
+    
+    return c.json({ ...settings, providerConfigs: maskedConfigs });
   })
   .post("/api/settings", async (c) => {
     const user = c.get("user");
     const updates = await c.req.json();
-    const [updatedSettings] = await db.insert(gatewaySettings).values({ userId: user.id, ...updates }).onConflictDoUpdate({ target: gatewaySettings.userId, set: updates }).returning();
+    
+    // Encrypt any new API keys
+    if (updates.providerConfigs) {
+      const [existing] = await db.select().from(gatewaySettings).where(eq(gatewaySettings.userId, user.id));
+      const oldConfigs = existing?.providerConfigs || {};
+      
+      for (const p in updates.providerConfigs) {
+        const newKey = updates.providerConfigs[p].apiKey;
+        // Only encrypt if it's not the masked string
+        if (newKey && newKey !== "••••••••••••••••") {
+          updates.providerConfigs[p].apiKey = encrypt(newKey);
+        } else if (newKey === "••••••••••••••••") {
+          // Keep the old encrypted key if user didn't change it
+          updates.providerConfigs[p].apiKey = oldConfigs[p]?.apiKey;
+        }
+      }
+    }
+
+    const [updatedSettings] = await db.insert(gatewaySettings)
+      .values({ userId: user.id, ...updates })
+      .onConflictDoUpdate({ target: gatewaySettings.userId, set: updates })
+      .returning();
     return c.json(updatedSettings);
   });
 
@@ -210,7 +256,7 @@ app.post("/v1/chat/completions", async (c) => {
     const [policyRecord] = await db.select().from(policies).where(eq(policies.userId, user.id));
     const [settings] = await db.select().from(gatewaySettings).where(eq(gatewaySettings.userId, user.id));
     const currentPolicy = policyRecord || defaultPolicy;
-    const currentSettings = settings || { defaultProvider: "gemini", fallbackProvider: "openai", routingRules: {} };
+    const currentSettings = settings || { defaultProvider: "gemini", fallbackProvider: "openai", routingRules: {}, providerConfigs: {} };
 
     const scanResult = scanAndRedact(lastMessage.content, currentPolicy);
 
@@ -236,12 +282,10 @@ app.post("/v1/chat/completions", async (c) => {
         messages: messages,
         onFinish: async ({ usage }) => {
           if (logRecord) {
-            await db.update(auditLogs)
-              .set({ 
-                promptTokens: usage.inputTokens || 0, 
-                completionTokens: usage.outputTokens || 0 
-              })
-              .where(eq(auditLogs.id, logRecord.id));
+            await db.update(auditLogs).set({ 
+              promptTokens: usage.inputTokens || 0, 
+              completionTokens: usage.outputTokens || 0 
+            }).where(eq(auditLogs.id, logRecord.id));
           }
         }
       });
@@ -251,17 +295,15 @@ app.post("/v1/chat/completions", async (c) => {
       const fallbackProvider = currentSettings.fallbackProvider || "openai";
       const fallbackModel = fallbackProvider === "openai" ? "gpt-4o-mini" : "gemini-1.5-flash";
       const result = streamText({
-        model: resolveProvider(fallbackModel, { defaultProvider: fallbackProvider }),
+        model: resolveProvider(fallbackModel, currentSettings),
         messages: messages,
         onFinish: async ({ usage }) => {
           if (logRecord) {
-            await db.update(auditLogs)
-              .set({ 
-                promptTokens: usage.inputTokens || 0, 
-                completionTokens: usage.outputTokens || 0,
-                provider: `${modelName} -> ${fallbackModel} (Failover)`
-              })
-              .where(eq(auditLogs.id, logRecord.id));
+            await db.update(auditLogs).set({ 
+              promptTokens: usage.inputTokens || 0, 
+              completionTokens: usage.outputTokens || 0,
+              provider: `${modelName} -> ${fallbackModel} (Failover)`
+            }).where(eq(auditLogs.id, logRecord.id));
           }
         }
       });
