@@ -45,14 +45,14 @@ describe("Core PII Redaction Engine", () => {
   test("Redacts API keys", () => {
     const result = scanAndRedact("My key is sk-1234567890abcdef1234567890abcdef");
     expect(result.matches.length).toBe(1);
-    expect(result.matches[0].type).toBe("API_KEY");
+    expect(result.matches[0]?.type).toBe("API_KEY");
     expect(result.redacted).toContain("[REDACTED_API_KEY]");
   });
 
   test("Redacts Emails", () => {
     const result = scanAndRedact("Contact me at user@example.com.");
     expect(result.matches.length).toBe(1);
-    expect(result.matches[0].type).toBe("EMAIL");
+    expect(result.matches[0]?.type).toBe("EMAIL");
     expect(result.redacted).toContain("[REDACTED_EMAIL]");
   });
 

@@ -5,6 +5,7 @@ import {
   boolean,
   jsonb,
   timestamp,
+  integer,
 } from "drizzle-orm/pg-core";
 
 export const auditLogs = pgTable("audit_logs", {
@@ -19,6 +20,8 @@ export const auditLogs = pgTable("audit_logs", {
     .default([])
     .notNull(),
   provider: text("provider").notNull(),
+  promptTokens: integer("prompt_tokens").default(0).notNull(),
+  completionTokens: integer("completion_tokens").default(0).notNull(),
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
@@ -46,6 +49,15 @@ export const policies = pgTable("policies", {
     .$type<Array<{ role: string; type: string }>>()
     .default([])
     .notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const gatewaySettings = pgTable("gateway_settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull().unique(),
+  defaultProvider: text("default_provider").default("gemini").notNull(),
+  fallbackProvider: text("fallback_provider").default("openai").notNull(),
+  routingRules: jsonb("routing_rules").$type<Record<string, string>>().default({}).notNull(), // e.g. {"gpt-4": "openai", "claude": "anthropic"}
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 

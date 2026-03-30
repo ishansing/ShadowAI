@@ -22,6 +22,7 @@ export interface RedactionResult {
   original: string;
   redacted: string;
   matches: PiiMatch[];
+  wasRedacted: boolean;
   riskScore: number; // 0-100
   shouldBlock: boolean; // True if any match has a 'block' action
 }
@@ -130,6 +131,7 @@ export function scanAndRedact(
     original: text,
     redacted: redactedText,
     matches,
+    wasRedacted: matches.length > 0,
     riskScore: Math.min(riskScore, 100),
     shouldBlock,
   };

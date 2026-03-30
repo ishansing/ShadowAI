@@ -14,7 +14,9 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.64",
     "@ai-sdk/google": "^3.0.43",
+    "@ai-sdk/openai": "^3.0.48",
     "@shadow/auth": "workspace:*",
     "@shadow/core": "workspace:*",
     "@shadow/db": "workspace:*",
